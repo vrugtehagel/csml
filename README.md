@@ -82,11 +82,11 @@ To define elements, use CSS selector syntax. The order CSML requires is: tag nam
 
 ### Text transforms
 
-In order to write large amounts of text comfortably, CSML offers transforms. These are functions running over each piece of text in the document. You may register them using the `registerTransform` function. It accepts a name as first argument, and a function as second argument. The callback gets two argument itself; first, the text, and then a `Context` object, which allows you to do some basic querying so the transform only runs when you want to. If the transform returns a string, the text is replaced by that string. Otherwise, it does not change. Here's an example:
+In order to write large amounts of text comfortably, CSML offers _transforms_. These are functions running over each piece of text in the document. You may register them using the `addTransform` function. It accepts a name as first argument, and a function as second argument. The callback gets two argument itself; first, the text, and then a `Context` object, which allows you to do some basic querying so the transform only runs when you want to. If the transform returns a string, the text is replaced by that string. Otherwise, it does not change. Here's an example:
 ```js
-import { registerTransform } from 'csml'
+import { addTransform } from 'csml'
 
-registerTransform('preformatted', (text, context) => {
+addTransform('preformatted', (text, context) => {
   if(context.hasFlag('preformatted')) return
   return text.replaceAll(/\s+/g, ' ')
 })
