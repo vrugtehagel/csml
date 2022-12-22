@@ -68,10 +68,6 @@ export function render(url: URL | string, args?: any): Promise<string> {
  * @param transform The callback to run over pieces of text. If the return
  *                  value of the callback is a string, then the text node will
  *                  be replaced by it; otherwise, the text remains unchanged.
- * 
- * @throws {TypeError} The name provided contains non-alphanumeric
- *                     characters other than a dash (-) or underscore (_).
- * @throws {TypeError} The transform under the given name already exists.
  */
 export function addTransform(name: string, transform: Transform): void {
 	config.addTransform(name, transform)
@@ -100,10 +96,6 @@ export function removeTransform(name: string): void {
  * ```
  * 
  * @param name The (unique) name of the flag.
- * 
- * @throws {TypeError} The name provided contains non-alphanumeric
- *                     characters other than a dash (-) or underscore (_).
- * @throws {TypeError} The flag under the given name already exists.
  */
 export function addFlag(name: string, transform: Transform, options?: FlagTransformOptions): void {
     config.addFlag(name, transform, options)
