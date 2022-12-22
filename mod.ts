@@ -4,9 +4,9 @@
  * @module
  */
 
-import CSML from './build/index.js'
-import Context from './build/classes/context.js'
-import config from './config/index.js'
+import CSML from './src/build/index.js'
+import Context from './src/build/classes/context.js'
+import config from './src/config/index.js'
 
 /** The callback used to define flags and other transforms. */
 export interface Transform {
