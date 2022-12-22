@@ -97,6 +97,11 @@ export function removeTransform(name: string): void {
  * ```
  * 
  * @param name The (unique) name of the flag.
+ * @param tranform The callback to run over pieces of text. If the return
+ *                 value of the callback is a string, then the text node will
+ *                 be replaced by it; otherwise, the text remains unchanged.
+ * @param options Change the behavior of the flag. See the
+ *                `FlagTransformOptions` documentation for more info.
  */
 export function addFlag(name: string, transform: Transform, options?: FlagTransformOptions): void {
     config.addFlag(name, transform, options)
