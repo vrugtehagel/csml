@@ -43,7 +43,6 @@ config.addTransform('code', text => {
 })
 
 config.addTransform('link', text => {
-	console.log({text})
 	return text.replaceAll(/\[(\b[^\]]+\b)\]\(([^)]+)\)/g, (match, content, url) => {
 		const href = html.getAttribute('href', url)
 		return `<a${href}>${content}</a>`
