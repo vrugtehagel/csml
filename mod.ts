@@ -9,10 +9,12 @@ import Context from './build/classes/context.js'
 import config from './config/index.js'
 
 /** The callback used to define flags and other transforms. */
-export type Transform = (text: string, context: Context) => string | any;
+export interface Transform {
+    (text: string, context: Context): string | any;
+}
 
 /** The type of the optional third argument to `addFlag`. */
-export type FlagTransformOptions = {
+export interface FlagTransformOptions {
     /**
      * When set to `true`, will only apply the transform if the flag is _not_
      * present. Otherwise, the transform is applied only when one of the text
@@ -27,7 +29,7 @@ export type FlagTransformOptions = {
      * 
      * @default {false}
      */
-    preformatted: boolean;
+    preformatted?: boolean;
 }
 
 /**
@@ -74,8 +76,7 @@ export function addTransform(name: string, transform: Transform): void {
 }
 
 /**
- * Removes a transform. If the transform under the given name does not exist,
- * it does nothing.
+ * Removes a transform, if it exists.
  * @param name The name of the transform to remove.
  */
 export function removeTransform(name: string): void {
@@ -102,8 +103,7 @@ export function addFlag(name: string, transform: Transform, options?: FlagTransf
 }
 
 /**
- * Removes a flag. If the flag under the given name does not exist,
- * it does nothing.
+ * Removes a flag, if it exists.
  * 
  * @param name The name of the transform to remove.
  */
@@ -112,9 +112,7 @@ export function removeFlag(name: string): void {
 }
 
 /**
- * Adds a tag to be interpreted as having textual (preformatted) content only.
- * The children under elements with the given tag name will then be parsed as
- * plain text.
+ * Adds a tag to be parsed as having textual content only.
  * 
  * @param name A tag name.
  */
@@ -124,8 +122,7 @@ export function addPreformattedTag(name: string): void {
 }
 
 /**
- * Removes a tag from the list of preformatted tags. If the tag has not been
- * added, it does nothing.
+ * Removes a tag from the list of preformatted tags, if it exists.
  * 
  * @param name A tag name.
  */
