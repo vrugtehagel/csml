@@ -1,6 +1,6 @@
 import voidTags from '../data/void-tags.js'
 
-export default new class HTMLBuilder {
+export default new class HTML {
 
 	getOpeningTag(element){
 		const {tagName} = element
@@ -12,10 +12,9 @@ export default new class HTMLBuilder {
 	}
 
 	getClosingTag(element){
-		const {tagName, flags} = element
+		const {tagName, attributes} = element
 		if(!tagName) return ''
-		if(voidTags.includes(tagName)) return ''
-		if('void' in flags) return ''
+		if(voidTags.has(tagName)) return ''
 		return `</${tagName}>`
 	}
 

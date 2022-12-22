@@ -1,11 +1,12 @@
 import Context from '../classes/context.js'
-import htmlBuilder from '../singletons/html-builder.js'
 import string from '../tags/string.js'
 import text from '../tags/text.js'
 
+import html from '../../html/index.js'
+import config from '../../config/index.js'
+
 export default class CSMLCore {
 	#tainted = false
-	#transforms = new Set
 	#open = []
 	#context = new Context(this.#open)
 	#csml
@@ -29,28 +30,22 @@ export default class CSMLCore {
 			this.#output += content
 			this.#promises[content].context = new Context([...this.#open])
 		}
-		else this.#output += this.#applyTransforms(content)
+		else this.#output += config.runTransforms(content, this.#context)
+	}
+
+	doctype(level, content){
+		this.#output += `<!DOCTYPE ${content}>`
 	}
 
 	#addOpen(level, element){
-		this.#output += htmlBuilder.getOpeningTag(element)
-		const output = htmlBuilder.getClosingTag(element)
+		this.#output += html.getOpeningTag(element)
+		const output = html.getClosingTag(element)
 		this.#open.unshift({level, element, output})
 	}
 
 	#removeOpenUntil(level){
 		while(level <= this.#open[0]?.level)
 			this.#output += this.#open.shift().output
-	}
-
-	#applyTransforms(text, context = this.#context){
-		const {transforms} = this.#shared
-		let result = text
-		for(const [name, transform] of transforms){
-			const transformed = transform(result, context)
-			result = typeof transformed == 'string' ? transformed : result
-		}
-		return result
 	}
 
 	taint(){
@@ -81,7 +76,7 @@ export default class CSMLCore {
 			})
 			const content = tag(parts, ...newSubs)
 			const {context} = this.#promises[uuid]
-			const transformed = this.#applyTransforms(content, context)
+			const transformed = config.runTransforms(content, context)
 			this.#output = this.#output.replace(uuid, transformed)
 		})
 		if(this.#promises[uuid]) throw Error('UUID not unique')

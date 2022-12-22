@@ -1,4 +1,4 @@
-export default [
+export default new Set([
 	'area',
 	'base',
 	'br',
@@ -15,4 +15,4 @@ export default [
 	'source',
 	'track',
 	'wbr'
-]
+])

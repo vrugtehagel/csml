@@ -3,6 +3,8 @@ import TextProcessor from '../classes/text-processor.js'
 import parser from '../singletons/parser.js'
 import generator from '../singletons/generator.js'
 
+import config from '../../config/index.js'
+
 export default class LineTreeNode extends TreeNode {
 	#processor
 	#level = 0
@@ -58,13 +60,13 @@ export default class LineTreeNode extends TreeNode {
 		if(data.branch == 'Script') return true
 		if(data.branch == 'FlowControl') return false
 		if(data.branch == 'TextNode') return true
+		if(data.branch == 'Doctype') return true
 		const {Elements} = data[data.branch]
 		const elements = [Elements.Element, ...Elements.DescendantElement]
-		const flattenTagNames = ['style', 'script']
-		const flattenFlags = ['preformatted', 'indent', 'text-only']
+		const {preformattedFlags, preformattedTags} = config
 		return elements.some(({TagName, Flag}) => {
-			if(flattenTagNames.includes(TagName)) return true
-			return Flag.some(({FlagName}) => flattenFlags.includes(FlagName))
+			if(preformattedTags.has(TagName)) return true
+			return Flag.some(({FlagName}) => preformattedFlags.has(FlagName))
 		})
 	}
 

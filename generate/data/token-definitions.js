@@ -26,5 +26,6 @@ export default {
 	_Elements: ['G', '_Element_*DescendantElement'],
 	_ContentfulElements: ['G', '_Elements_?FlowControl_?Comment_?String'],
 	_TextNode: ['G', '_+Flag _?String'],
-	_Line: ['B', '_Comment, _Script, _FlowControl, _ContentfulElements, _TextNode']
+	_Doctype: ['G', '!DOCTYPE _?String'],
+	_Line: ['B', '_Comment, _Doctype, _Script, _FlowControl, _ContentfulElements, _TextNode']
 }

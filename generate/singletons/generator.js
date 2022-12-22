@@ -84,6 +84,12 @@ export default new class Generator {
 		return data.String
 	}
 
+	stringifyDoctype(data, level, children){
+		const {scope} = this
+		const content = this.#stringifyUserText(data)
+		return `${scope}.doctype(${level},${content})\n`
+	}
+
 	stringifyLine(data, level, children){
 		if(!data) return children
 		const {branch} = data
