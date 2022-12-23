@@ -35,6 +35,15 @@ export default class CSML {
 		return (await this.#render(url, args)).default
 	}
 
+	static async convert(url, args){
+		const content = await this.render(url, args)
+		const {href} = url
+		const htmlURL = href.endsWith('.csml')
+			? href.slice(-5) + '.html'
+			: href + '.html'
+		await Deno.writeTextFile(htmlURL, htmlURL, this.writeOptions)
+	}
+
 	#meta
 	#shared = {
 		id: -1,
