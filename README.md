@@ -12,7 +12,7 @@ For details on the APIs this package provides, visit [deno.land/x/csml](https://
 
 ## Examples
 
-For an example, see the `/example` folder. It contains a "project" of a single page, with some additional included CSML files. It should give you a fairly decent idea of what CSML does, and how.
+For an example, see the `/example` folder. It contains a "project" of a single page, with some additional imported CSML files. It should give you a fairly decent idea of what CSML does, and how.
 
 
 
@@ -60,7 +60,7 @@ You may write complex logic in your CSML, just using JavaScript. For large block
     p There are no drinks available.
 ```
 
-Lastly, let's talk a bit about how CSML modules act. They are a little bit like JavaScript modules, in the sense that they can `import` and `export` values like them. CSML modules always provide a default export with the stringified HTML that is the result of the processed CSML file. CSML modules also take arguments, which are available inside a module through `csml.args`. The `csml` object is imported implicitly into your CSML modules, and it also has the `csml.include(url, args)` method, allowing you to easily include other CSML templates into the current file. Note that there is an important difference between ES6 modules and CSML modules; ES6 modules can only be run once, whereas CSML modules re-run every time you include them. This is, of course, necessary for reusable templates to be useful. 
+Lastly, let's talk a bit about how CSML modules act. They are a little bit like JavaScript modules, in the sense that they can `import` and `export` values like them. CSML modules always provide a default export with the stringified HTML that is the result of the processed CSML file. CSML modules also take arguments, which are available inside a module through `csml.args`. The `csml` object is imported implicitly into your CSML modules, and it also has the `csml.import(url, args)` method, allowing you to easily import other CSML templates into the current file. Note that there is an important difference between ES6 modules and CSML modules; ES6 modules can only be run once, whereas CSML modules re-run every time you import them. This is, of course, necessary for reusable templates to be useful. 
 
 
 
