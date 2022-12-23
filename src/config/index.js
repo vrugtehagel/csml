@@ -1,6 +1,7 @@
 import config from './singletons/config.js'
 
 import html from '../html/index.js'
+import errors from '../errors/index.js'
 
 config.addFlag('html', (text, context) => {
 	return text
@@ -17,7 +18,7 @@ config.addFlag('indent', (text, context) => {
 	const [amount, tabSize] = args.split(',').map(arg => Number(arg))
 	const indented = `\n${text}`.replaceAll('\n', ' '.repeat(amount))
 	if(!tabSize) return indented.slice(1)
-	if(tabSize > 10) throw Error(':indent tabsize cannot be greater than 10')
+	if(tabSize > 10) errors.throw('tabsize-too-large', {args})
 	const regex = new RegExp(`\n( {${tabSize}})+`, 'g')
 	return indented
 		.replaceAll(regex, match => '\t'.repeat(match.length / tabSize))

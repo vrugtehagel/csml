@@ -1,25 +1,30 @@
-import generate from '../../generate/index.js'
-
 import CSMLCore from '../classes/csml-core.js'
 import createProxyWrapper from '../functions/create-proxy-wrapper.js'
 import maskSecret from '../functions/mask-secret.js'
 
+import generate from '../../generate/index.js'
+import errors from '../../errors/index.js'
+
+
 export default class CSML {
 	static #availableId = 1
 	static #map = {}
+	static writeOptions = {create: true}
 	static async #render(url, args){
 		const id = CSML.#availableId++
 		CSML.#map[id] = {args}
 		const content = await Deno.readTextFile(url)
-		const code = generate(content, {csmlArgs: [id]})
+		const code = generate(content, url, {csmlArgs: [id]})
 		const jsURL = new URL(`${url}.${id}.js`)
-		await Deno.writeTextFile(jsURL, code, {createNew: true})
-		try {
-			const imported = await import(jsURL)
-			return imported
-		} finally {
-			await Deno.remove(jsURL)
-		}
+		await Deno.writeTextFile(jsURL, code, this.writeOptions)
+		const controller = new AbortController
+		const {signal} = controller
+		const cleanup = async () => await Deno.remove(jsURL)
+		window.addEventListener('unload', cleanup, {signal, once: true})
+		const imported = await import(jsURL)
+		controller.abort()
+		await cleanup()
+		return imported
 	}
 
 	static async import(url, args){
@@ -34,12 +39,11 @@ export default class CSML {
 	#shared = {
 		id: -1,
 		map: CSML.#map,
-		transforms: CSML.#transforms
 	}
 
 	constructor(secret, meta, id){
 		if(!CSML.#map[id] || CSML.#map[id].csml)
-			throw TypeError('Illegal constructor')
+			errors.throw('illegal-constructor')
 		CSML.#map[id].csml = this
 		const core = new CSMLCore(this, this.#shared)
 		this.#meta = meta

@@ -93,7 +93,6 @@ export default new class Generator {
 	stringifyLine(data, level, children){
 		if(!data) return children
 		const {branch} = data
-		if(data[branch] == null) throw Error('Syntax error')
 		return this['stringify' + branch](data[branch], level, children)
 	}
 

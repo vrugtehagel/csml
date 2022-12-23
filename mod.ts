@@ -40,7 +40,7 @@ export interface FlagTransformOptions {
  * @param args An arguments object to pass to the CSML module. The module will
  *             be able to access this argument through `csml.args`. While it is
  *             recommended that this is an object, it is also possible to pass
- *             anything else here,
+ *             anything else here.
  * @returns A promise resolving to a `Module` object, including all exports
  *          from the CSML file. The HTML output is included as the default
  *          export.
@@ -64,7 +64,7 @@ export function importModule(url: URL | string, args?: any): Promise<Module> {
  * @param args An arguments object to pass to the CSML module. The module will
  *             be able to access this argument through `csml.args`. While it is
  *             recommended that this is an object, it is also possible to pass
- *             anything else here,
+ *             anything else here.
  * @returns A promise resolving to the output HTML.
  */
 export function render(url: URL | string, args?: any): Promise<string> {

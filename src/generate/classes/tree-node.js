@@ -11,6 +11,7 @@ export default class TreeNode {
 	get descendants(){ return [...this].slice(1) }
 	get index(){ return this.#parentNode.#children.indexOf(this) }
 	get previousSibling(){ return this.#parentNode.#children[this.index - 1] ?? null }
+	get root(){ return this.#parentNode?.root ?? this }
 
 	*[Symbol.iterator](){
 		yield this

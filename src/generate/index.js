@@ -1,9 +1,9 @@
 import LineTreeNode from './classes/line-tree-node.js'
 import generator from './singletons/generator.js'
 
-export default function generate(source, {csmlArgs}){
+export default function generate(source, url, {csmlArgs}){
 	const lines = source.split(/\r?\n/)
-	const root = LineTreeNode.getRoot()
+	const root = LineTreeNode.getRoot(url)
 	let line = root
 	for(const content of lines)
 		line = line.addAdjacentNode(new LineTreeNode(content))

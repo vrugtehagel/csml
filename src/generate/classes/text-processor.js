@@ -1,5 +1,7 @@
 import Text from '../classes/text.js'
 
+import errors from '../../errors/index.js'
+
 export default class TextProcessor {
 	static #templateEscapeRegex = /[`$]/g
 	static escape(string){
@@ -30,6 +32,7 @@ export default class TextProcessor {
 		this.#text = typeof text == 'string' ? new Text(text) : text
 	}
 
+	get current(){ return this.#text.current }
 	get done(){ return this.#text.length == 0 }
 
 	toString(){ return this.#text.toString() }
@@ -50,7 +53,10 @@ export default class TextProcessor {
 	processInterpolation(){
 		this.#text.select()
 		const matched = this.#text.moveTo('}}')
-		if(!matched) throw Error('Unclosed {{')
+		if(this.#text.selected.includes('{{', 2))
+			errors.throw('unexpected', {type: 'token', thing: '{{'})
+		if(!matched)
+			errors.throw('expected', {type: 'token', thing: '}}'})
 		this.#text.read(2)
 		this.#text.cut()
 		return '$' + this.#text.clipboard.slice(1, -1)
@@ -60,7 +66,6 @@ export default class TextProcessor {
 		this.#text.select()
 		this.#text.readWhile(shape)
 		this.#text.cut()
-		// return TextProcessor.escape(this.#text.clipboard)
 		return this.#text.clipboard
 	}
 

@@ -4,6 +4,8 @@ import parser from '../singletons/parser.js'
 import generator from '../singletons/generator.js'
 
 import config from '../../config/index.js'
+import errors from '../../errors/index.js'
+
 
 export default class LineTreeNode extends TreeNode {
 	#processor
@@ -12,11 +14,13 @@ export default class LineTreeNode extends TreeNode {
 	#output = null
 	#data
 	#isRoot = false
+	#url
 
-	static getRoot(){
+	static getRoot(url){
 		const root = new LineTreeNode('')
 		root.#level = -1
 		root.#isRoot = true
+		root.#url = url
 		return root
 	}
 
@@ -75,7 +79,7 @@ export default class LineTreeNode extends TreeNode {
 	withdraw(){
 		const {parentNode} = this.parentNode
 		const {index, children} = this
-		if(index == -1) throw Error('Node not child of parent')
+		if(index == -1) errors.throw('unexpected-orphan')
 		const path = [this.previousSibling ?? this.parentNode]
 		let node
 		while(node = path[0].lastChild) path.unshift(node)
@@ -86,12 +90,25 @@ export default class LineTreeNode extends TreeNode {
 
 	parse(){
 		if(this.#data !== undefined) return false
-		this.#data = parser.parse('Line', this.#processor)
-		if(this.#data && this.#data.branch != 'Comment') return false
-		if(!this.#processor.done) throw Error(`Syntax error`)
-		if(this.#isRoot) return false
-		this.withdraw()
-		return true
+		try {
+			this.#data = parser.parse('Line', this.#processor)
+			if(this.#data && !this.#data[this.#data.branch])
+				errors.throw('empty-token', {token: this.#data.branch})
+			if(this.#data && this.#data.branch != 'Comment') return false
+			if(!this.#processor.done){
+				const type = 'token'
+				const thing = this.#processor.current
+				errors.throw('unexpected', {type, thing})
+			}
+			if(this.#isRoot) return false
+			this.withdraw()
+			return true
+		} catch(error){
+			const url = this.root.#url
+			const row = this.#row
+			const col = -this.#processor.toString().length
+			errors.throwSyntaxError({url, row, col, error})
+		}
 	}
 
 	generate(){
@@ -102,7 +119,13 @@ export default class LineTreeNode extends TreeNode {
 			index -= this.children[index].parse()
 		const content = this.children.map(child => child.generate()).join('')
 		const level = this.#level
-		this.#output = generator.stringifyLine(data, level, content)
+		try {
+			this.#output = generator.stringifyLine(data, level, content)
+		} catch(error){
+			const url = this.root.#url
+			const row = this.#row
+			errors.throwSyntaxError({url, row, error})
+		}
 		return this.#output
 	}
 

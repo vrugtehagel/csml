@@ -5,6 +5,7 @@ import text from '../tags/text.js'
 
 import html from '../../html/index.js'
 import config from '../../config/index.js'
+import errors from '../../errors/index.js'
 
 export default class CSMLCore {
 	#tainted = false
@@ -92,7 +93,7 @@ export default class CSMLCore {
 			const transformed = config.runTransforms(content, context)
 			this.#output = this.#output.replace(uuid, transformed)
 		})
-		if(this.#promises[uuid]) throw Error('UUID not unique')
+		if(this.#promises[uuid]) errors.throw('duplicate-uuid')
 		this.#promises[uuid] = {promise}
 		return uuid
 	}
