@@ -34,13 +34,13 @@ Elements are written by specifiying the following, in order:
  - **#id**: optional. If the value ends up being `null` or the empty string, the attribute is omitted.
  - **.classname**: You may specifiy one or more classnames. When you interpolate values, you may also provide an array, and each element of the array is then used as a class. Alternatively, you may provide space-separated strings for a single class value; they are then interpreted as multiple classes. For example, `div.{{ ['foo', 'bar'] }}` and `div.{{ 'foo bar' }}` are both equivalent to `div.foo.bar` and output `<div class="foo bar">`.
  - **[attribute]**: There are a few accepted forms for these. You may use single or double quotes around your values, or, in some cases, leave the quotes out, just like in HTML and CSS. For boolean attributes, you may write them like `[hidden]`, without a value at all. When using interpolation for the _entire_ value, if the interpolation results in `null` or `undefined`, the attribute is omitted. For example, `button[disabled={{ null }}]` results in just `<button>`. Lastly, for logic-heavy elements, you may specify attributes in bulk by providing an object of attribute-value combinations withing the square brackets. For example, let's say we've got a `const attrs` with the value `{foo: '23', bar: 'baz'}`, then `my-element[{{ attrs }}]` will result in `<my-element foo=23 bar=baz>`.
- - **:flag**: re-using the pseudo-class syntax from CSS, this can be used to alter the behavior of text inside an element. There are a few defaults set already, but you may remove those or create your own using `addFlag`. You can also provide arguments to a flag, like in CSS, e.g. `:indent(4)`. Note that interpolation is permitted in flag arguments, but _not_ in flag names.
+ - **:flag**: reusing the pseudo-class syntax from CSS, this can be used to alter the behavior of text inside an element. There are a few defaults set already, but you may remove those or create your own using `addFlag`. You can also provide arguments to a flag, like in CSS, e.g. `:indent(4)`. Note that interpolation is permitted in flag arguments, but _not_ in flag names.
 
 The doctype may be specified by writing `!DOCTYPE` followed by the docstring (generally, just `!DOCTYPE html`).
 
 You may write a deeper nested stucture on a single line by using the child combinator `>`. For example, `div > span Hello!` outputs `<div><span>Hello!</span></div>`.
 
-Some elements may not have their children parsed, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addPreformattedTag()` and `removePreformattedTag()`. For an extensive list of the default configuration, see below.
+Some elements may not have their children parsed, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addPreformattedTag()` and `removePreformattedTag()`. For an extensive list of the default configuration, see the configuration section below.
 
 
 ### Logic

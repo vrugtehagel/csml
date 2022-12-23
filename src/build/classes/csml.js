@@ -7,15 +7,6 @@ import maskSecret from '../functions/mask-secret.js'
 export default class CSML {
 	static #availableId = 1
 	static #map = {}
-	static #transforms = new Map
-	static addTransform(name, transform){
-		if(this.#transforms.has(name))
-			throw Error(`Transform "${name}" already registered`)
-		this.#transforms.set(name, transform)
-	}
-	static removeTransform(name){
-		this.#transforms.delete(name)
-	}
 	static async #render(url, args){
 		const id = CSML.#availableId++
 		CSML.#map[id] = {args}
@@ -30,6 +21,11 @@ export default class CSML {
 			await Deno.remove(jsURL)
 		}
 	}
+
+	static async import(url, args){
+		return await this.#render(url, args)
+	}
+
 	static async render(url, args){
 		return (await this.#render(url, args)).default
 	}
@@ -54,7 +50,7 @@ export default class CSML {
 
 	get args(){ return CSML.#map[this.#shared.id].args }
 
-	async include(relativeURL, args){
+	async import(relativeURL, args){
 		const url = new URL(relativeURL, this.#meta.url)
 		return await CSML.#render(url, args)
 	}

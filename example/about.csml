@@ -5,7 +5,7 @@
   const title = 'About me'
   const page = 'about'
 
-  const navModule = await csml.include('./includes/navigation-menu.csml', {page})
+  const navModule = await csml.import('./includes/navigation-menu.csml', {page})
   const titlePrefix = navModule.titlePrefix ?? ''
   const navigationMenu = navModule.default
 
@@ -45,4 +45,4 @@ html[lang=en]
           [vrugtehagel.nl](http://vrugtehagel.nl). It has some of my other
           projects. Essentially, it's a better "about" page than this one.
 
-    :html {{ csml.include('./includes/footer-menu.csml') }}
+    :html {{ csml.import('./includes/footer-menu.csml') }}

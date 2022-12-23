@@ -32,6 +32,23 @@ export interface FlagTransformOptions {
     preformatted?: boolean;
 }
 
+
+/**
+ * Imports a CSML module, including the HTML and other exports.
+ * 
+ * @param url An absolute URL to a CSML module.
+ * @param args An arguments object to pass to the CSML module. The module will
+ *             be able to access this argument through `csml.args`. While it is
+ *             recommended that this is an object, it is also possible to pass
+ *             anything else here,
+ * @returns A promise resolving to a `Module` object, including all exports
+ *          from the CSML file. The HTML output is included as the default
+ *          export.
+ */
+export function importModule(url: URL | string, args?: any): Promise<Module> {
+    return CSML.import(url, args)
+}
+
 /**
  * Renders a CSML module.
  * 
@@ -48,12 +65,11 @@ export interface FlagTransformOptions {
  *             be able to access this argument through `csml.args`. While it is
  *             recommended that this is an object, it is also possible to pass
  *             anything else here,
- * @returns The output HTML.
+ * @returns A promise resolving to the output HTML.
  */
 export function render(url: URL | string, args?: any): Promise<string> {
 	return CSML.render(url, args)
 }
-
 
 /**
  * Adds a transform to run over text nodes.
