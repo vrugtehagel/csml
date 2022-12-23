@@ -10,13 +10,16 @@ config.addFlag('html', (text, context) => {
 		.replaceAll('>', '&gt;')
 }, {invert: true})
 
-config.addFlag('preformatted', () => null, {preformatted: true})
+config.addFlag('preformatted', text => {
+	return text.replace(/\n+$/, '\n')
+}, {preformatted: true})
 
 config.addFlag('indent', (text, context) => {
 	const args = context.getFlag('indent')
 	if(!args) return 
 	const [amount, tabSize] = args.split(',').map(arg => Number(arg))
-	const indented = `\n${text}`.replaceAll('\n', ' '.repeat(amount))
+	const indented = `\n${text}`.replaceAll('\n', '\n' + ' '.repeat(amount))
+		.replace(/\n+$/, '\n')
 	if(!tabSize) return indented.slice(1)
 	if(tabSize > 10) errors.throw('tabsize-too-large', {args})
 	const regex = new RegExp(`\n( {${tabSize}})+`, 'g')
