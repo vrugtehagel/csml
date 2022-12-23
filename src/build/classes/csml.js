@@ -41,7 +41,7 @@ export default class CSML {
 		const htmlURL = href.endsWith('.csml')
 			? href.slice(0, -5) + '.html'
 			: href + '.html'
-		await Deno.writeTextFile(htmlURL, content, this.writeOptions)
+		await Deno.writeTextFile(new URL(htmlURL), content, this.writeOptions)
 	}
 
 	#meta
