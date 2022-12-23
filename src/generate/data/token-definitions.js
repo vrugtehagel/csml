@@ -14,7 +14,11 @@ export default {
 	_FullSingleQuotedAttrValue: ['G', `'_?!SingleQuotedAttrValue'`],
 	_FullDoubleQuotedAttrValue: ['G', `"_?!DoubleQuotedAttrValue"`],
 	_FullUnquotedAttrValue: ['G', `_!UnquotedAttrValue`],
-	_FullAttrValue: ['B', '_!FullSingleQuotedAttrValue, _!FullDoubleQuotedAttrValue, _!FullUnquotedAttrValue'],
+	_FullAttrValue: ['B', [
+		'_!FullSingleQuotedAttrValue',
+		'_!FullDoubleQuotedAttrValue',
+		'_!FullUnquotedAttrValue'
+	]],
 	_EqualsAttrValue: ['G', '= _!FullAttrValue '],
 	_Attr: ['G', '[ _AttrName _?EqualsAttrValue]'],
 	_FlagName: ['S', /[-\w]/],
@@ -27,5 +31,12 @@ export default {
 	_ContentfulElements: ['G', '_Elements_?FlowControl_?Comment_?String'],
 	_TextNode: ['G', '_+Flag _?String'],
 	_Doctype: ['G', '!DOCTYPE _?String'],
-	_Line: ['B', '_Comment, _Doctype, _Script, _FlowControl, _ContentfulElements, _TextNode']
+	_Line: ['B', [
+		'_Comment',
+		'_Doctype',
+		'_Script',
+		'_FlowControl',
+		'_ContentfulElements',
+		'_TextNode'
+	]]
 }

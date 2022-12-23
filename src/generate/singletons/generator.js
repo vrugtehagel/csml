@@ -23,7 +23,7 @@ export default new class Generator {
 
 	stringifyAttr({AttrName, EqualsAttrValue}){
 		const {scope} = this
-		const key = `[${scope}.string\`${AttrName}\`]`
+		const key = `[${scope}.attrName\`${AttrName}\`]`
 		const value = `${scope}.attrValue\`${EqualsAttrValue ?? ''}\``
 		return `${key}:${value}`
 	}
@@ -39,7 +39,7 @@ export default new class Generator {
 		const attributes = Attr.map(data => this.stringifyAttr(data))
 		if(Id) attributes.push(`id:${scope}.string\`${Id}\``)
 		if(ClassName.length > 0)
-			attributes.push(`class:${scope}.string\`${ClassName.join(' ')}\``)
+			attributes.push(`class:${scope}.class\`${ClassName.join(' ')}\``)
 		const flags = Flag.map(data => this.stringifyFlag(data))
 		return `{${tagName},attributes:{${attributes}},flags:{${flags}}}`
 	}
@@ -81,7 +81,7 @@ export default new class Generator {
 	}
 
 	stringifyScript(data){
-		return data.String
+		return data.String + '\n'
 	}
 
 	stringifyDoctype(data, level, children){

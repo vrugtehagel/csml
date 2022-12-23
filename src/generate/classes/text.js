@@ -8,6 +8,8 @@ export default class Text {
 		this.#data = string
 	}
 
+	get cursor(){ return this.#cursor }
+	set cursor(value){ this.#cursor = Math.max(0, Math.min(value, this.length)) }
 	get length(){ return this.#data.length }
 	get previous(){ return this.#data[this.#cursor - 1] ?? '' }
 	get current(){ return this.#data[this.#cursor] ?? '' }

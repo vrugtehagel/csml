@@ -1,0 +1,21 @@
+@script
+
+  const items = [
+    {page: 'home', href: './home', text: 'Home'},
+    {page: 'about', href: './about', text: 'About'},
+    {page: 'contact', href: './contact', text: 'Contact', hidden: true}
+  ]
+
+  const currentPage = csml.args.page
+  const currentItem = items.find(item => item.page == currentPage)
+  
+  export const titlePrefix = `${currentItem.text} | `
+
+nav
+  @for(const item of items)
+    @script
+      const selected = item.page == currentPage ? 'selected' : null
+      const hidden = item.hidden ? '' : null
+      const {href, text} = item
+      const attributes = {href, hidden}
+    a.{{ selected }}[{{ attributes }}]:text-only {{ text }}

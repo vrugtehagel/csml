@@ -8,6 +8,7 @@ import config from '../../config/index.js'
 export default class LineTreeNode extends TreeNode {
 	#processor
 	#level = 0
+	#row = -1
 	#output = null
 	#data
 	#isRoot = false
@@ -37,6 +38,7 @@ export default class LineTreeNode extends TreeNode {
 		let node = this
 		while(line.#level <= node.#level) node = node.parentNode
 		node.addChild(line)
+		line.#row = this.#row + 1
 		return line
 	}
 

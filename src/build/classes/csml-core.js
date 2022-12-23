@@ -1,4 +1,5 @@
 import Context from '../classes/context.js'
+import stringifyFlatObject from '../functions/stringify-flat-object.js'
 import string from '../tags/string.js'
 import text from '../tags/text.js'
 
@@ -23,6 +24,7 @@ export default class CSMLCore {
 		const content = typeof elements.at(-1) == 'string'
 			? elements.pop()
 			: ''
+		for(const element of elements) this.#fixElementAttributes(element)
 		this.#removeOpenUntil(level)
 		for(const element of elements) this.#addOpen(level, element)
 		if(!content) return
@@ -46,6 +48,17 @@ export default class CSMLCore {
 	#removeOpenUntil(level){
 		while(level <= this.#open[0]?.level)
 			this.#output += this.#open.shift().output
+	}
+
+	#fixElementAttributes(element){
+		if(!element.attributes) return
+		const result = {}
+		for(const [name, value] of Object.entries(element.attributes)){
+			if(name[0] == '>')
+				Object.assign(result, JSON.parse(name.slice(1)) ?? {})
+			else result[name] = value
+		}
+		element.attributes = result
 	}
 
 	taint(){
@@ -92,8 +105,24 @@ export default class CSMLCore {
 		return this.#promiseTag(string, parts, ...subs)
 	}
 
+	#isSingleInterpolation(parts, ...subs){
+		return parts.length == 2 && parts[0] == '' && parts[1] == ''
+	}
+
+	class(parts, ...subs){
+		return this.string(parts, ...subs
+			.map(sub => Array.isArray(sub) ? sub.join(' ') : sub))
+	}
+
+	attrName(parts, ...subs){
+		if(this.#isSingleInterpolation(parts, ...subs))
+			if(typeof subs[0] == 'object')
+				return `>${stringifyFlatObject(subs[0])}`
+		return this.string(parts, ...subs)
+	}
+
 	attrValue(parts, ...subs){
-		if(parts.length == 2 && parts[0] == '' && parts[1] == '')
+		if(this.#isSingleInterpolation(parts, ...subs))
 			if(subs[0] == null) return null
 		return this.string(parts, ...subs)
 	}

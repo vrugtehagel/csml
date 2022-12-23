@@ -37,7 +37,7 @@ export default new class Parser {
 	}
 
 	getBranchParser(definition){
-		const branches = definition.split(/,\s*/)
+		const branches = definition
 			.map(raw => [raw.replace(/_!?/, ''), raw.includes('!')])
 		return processor => this.#parseBranches(processor, branches)
 	}

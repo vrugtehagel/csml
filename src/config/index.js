@@ -49,5 +49,7 @@ config.addTransform('link', text => {
 	})
 })
 
-export default config
+for(const tag of ['title', 'script', 'style', 'textarea'])
+	config.addPreformattedTag(tag)
 
+export default config
