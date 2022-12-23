@@ -15,8 +15,8 @@ export default new class Config {
 	addFlag(name, callback, options = {}){
 		this.#validateName(name)
 		const transform = options.invert
-			? (text, context) => !context.hasFlag(name) && callback(text)
-			: (text, context) => context.hasFlag(name) && callback(text)
+			? (text, context) => !context.hasFlag(name) && callback(text, context)
+			: (text, context) => context.hasFlag(name) && callback(text, context)
 		this.#addingFlag = true
 		if(this.#transforms.has(`flag:${name}`))
 			errors.throw('thing-already-exists', {thing: 'flag', name})

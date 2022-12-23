@@ -11,7 +11,7 @@ export default class Context {
 
 	getFlag(flagName){
 		return this.#open.find(({element}) => flagName in element.flags)
-			?.flags[flagName] ?? ''
+			?.element.flags[flagName] ?? ''
 	}
 
 	hasParent(tagName){
