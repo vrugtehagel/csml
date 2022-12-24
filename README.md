@@ -71,6 +71,7 @@ CSML offers transforms for text nodes so that writing big chunks of text becomes
 #### Flags
 
  - `'html'`: disables HTML escaping. Removing this flag removes the HTML escaping, and is not advised.
+ - `'keep-trailing-newlines'`: disables the automatic removal of trailing newlines in preformatted text nodes.
  - `'preformatted'`: signals the parser to parse the children as plain text.
  - `'indent'`: Similar to `'preformatted'`, but also indents the text by some amount. The flag requires a first argument, the amount of indentation. This is in terms of spaces. If you want to convert spaces to tabs, you may provide the second argument to indicate tab size. For example, `:indent(4, 4)` indents with 1 tab (indents with 4 spaces, then replaces multiples of 4 spaces with a tab).
  - `'text-only'`: Similar to `'preformatted'`, but collapses all whitespace.

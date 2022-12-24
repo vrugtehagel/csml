@@ -72,24 +72,6 @@ export function render(url: URL | string, args?: any): Promise<string> {
 }
 
 /**
- * Converts a .csml file into .html
- * 
- * @param url An absolute URL to a CSML module. The output file will be at the
- *            same location, but will replace the .csml extension with .html.
- *            If the input file does not have a .csml extension, the .html
- *            extension will simply be appended. If the file already exists, it
- *            will be overwritten.
- * @param args An arguments object to pass to the CSML module. The module will
- *             be able to access this argument through `csml.args`. While it is
- *             recommended that this is an object, it is also possible to pass
- *             anything else here.
- * @returns A promise resolving when the file has been written.
- */
-export function convert(url: URL | string, args?: any): Promise<void> {
-    return CSML.convert(url, args)
-}
-
-/**
  * Adds a transform to run over text nodes.
  * 
  * @example

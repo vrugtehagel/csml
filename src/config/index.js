@@ -3,16 +3,18 @@ import config from './singletons/config.js'
 import html from '../html/index.js'
 import errors from '../errors/index.js'
 
-config.addFlag('html', (text, context) => {
+config.addFlag('html', text => {
 	return text
 		.replaceAll(/&(?![a-z]+;)(?!#x\d+;)/g, '&amp;')
 		.replaceAll('<', '&lt;')
 		.replaceAll('>', '&gt;')
 }, {invert: true})
 
-config.addFlag('preformatted', text => {
-	return text.replace(/\n+$/, '\n')
-}, {preformatted: true})
+config.addFlag('keep-trailing-newlines', text => {
+	return text.replaceAll(/\n+$/g, '')
+}, {invert: true, preformatted: true})
+
+config.addFlag('preformatted', text => null, {preformatted: true})
 
 config.addFlag('indent', (text, context) => {
 	const args = context.getFlag('indent')
