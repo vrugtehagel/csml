@@ -5,7 +5,7 @@ import errors from '../errors/index.js'
 
 config.addFlag('html', text => {
 	return text
-		.replaceAll(/&(?![a-z]+;)(?!#x\d+;)/g, '&amp;')
+		.replaceAll(/&(?![a-z]+;)(?!#x?\d+;)/g, '&amp;')
 		.replaceAll('<', '&lt;')
 		.replaceAll('>', '&gt;')
 }, {invert: true})
