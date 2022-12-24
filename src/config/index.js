@@ -26,7 +26,7 @@ config.addFlag('indent', (text, context) => {
 	if(tabSize > 10) errors.throw('tabsize-too-large', {args})
 	const regex = new RegExp(`\n( {${tabSize}})+`, 'g')
 	return indented
-		.replaceAll(regex, match => '\t'.repeat(match.length / tabSize))
+		.replaceAll(regex, match => '\n' + '\t'.repeat(match.length / tabSize))
 		.slice(1)
 }, {preformatted: true})
 
