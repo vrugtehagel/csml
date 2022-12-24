@@ -1,3 +1,5 @@
-export default (parts, ...subs) => String.raw(parts, ...subs.map(sub => {
-	return sub ?? ''
-}))
+export default (parts, ...subs) => {
+	const newParts = [...parts]
+	newParts.raw = newParts
+	return String.raw(newParts, ...subs.map(sub => sub ?? ''))
+}
