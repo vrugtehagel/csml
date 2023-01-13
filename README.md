@@ -66,22 +66,4 @@ Lastly, let's talk a bit about how CSML modules act. They are a little bit like 
 
 ### Configuration
 
-CSML offers transforms for text nodes so that writing big chunks of text becomes a lot nicer to do. It also offers those for flags specifically, and lastly, it allows for registering html tags to have a certain flag built-in. These are set using `config.addTransform`, `config.addFlag`, `config.addFlagToTag`. All of those also have a removal variant. For more details on the implementation details of the default configuration, check `src/0-configure/set-defaults.js`. The defaults set are listed below.
-
-#### Flags
-
- - `'html'`: disables HTML escaping. Removing this flag removes the HTML escaping, and is not advised.
- - `'preformatted'`: signals the parser to parse the children as plain text.
- - `'indent'`: Similar to `'preformatted'`, but also indents the text by some amount. The flag requires a first argument, the amount of indentation. This is in terms of spaces. If you want to convert spaces to tabs, you may provide the second argument to indicate tab size. For example, `:indent(4, 4)` indents with 1 tab (indents with 4 spaces, then replaces multiples of 4 spaces with a tab).
- - `'text-only'`: Similar to `'preformatted'`, but collapses all whitespace.
-
-#### Transforms
-
- - `'emphasis'`: Replaces underscores wrapping around text with `<em>` tags. For example, `foo _bar baz_` becomes `foo <em>bar baz</em>`.
- - `'strong'`: Similar to `'emphasis'`, but with `*asterisks*` and `<strong>` tags.
- - `'code'`: Similar to `'emphasis'`, but with <code>\`backticks\`</code> and `<code>` tags.
- - `'link'`: A markdown-style way to format a link, i.e. `[text content](https://example.com)`.
-
-#### Preformatted tags
-
-By default, the tags registered as preformatted are `title`, `script`, `style`, `textarea`.
+CSML offers transforms for text nodes so that writing big chunks of text becomes a lot nicer to do. It also offers those for flags specifically, and lastly, it allows for registering html tags to have a certain flag built-in. These are set using `config.addTransform`, `config.addFlag`, `config.addFlagToTag`. All of those also have a removal variant. For more details on the implementation details of the default configuration, check `src/0-configure/set-defaults.js`. To view the defaults, see the documentation on [deno.land/x/csml](https://deno.land/x/csml`).
