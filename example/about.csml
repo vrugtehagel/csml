@@ -20,8 +20,6 @@ html[lang=en]
     script[type=module][src=./index.js]
 
   body.dark-theme
-    // the :html flag disables the HTML escaping that happens by default
-    // so it is needed to embed other csml files, either directly or indirectly
     :html {{ navigationMenu }}
 
     main

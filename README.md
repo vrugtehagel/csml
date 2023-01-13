@@ -66,12 +66,11 @@ Lastly, let's talk a bit about how CSML modules act. They are a little bit like 
 
 ### Configuration
 
-CSML offers transforms for text nodes so that writing big chunks of text becomes a lot nicer to do. It also offers those for flags specifically, and lastly, it allows for registering html tags to be "text-only". These are simply set using `addTransform`, `addFlag`, `addPreformattedTag`. For more details on the implementation details, check `src/config/index.js`.
+CSML offers transforms for text nodes so that writing big chunks of text becomes a lot nicer to do. It also offers those for flags specifically, and lastly, it allows for registering html tags to have a certain flag built-in. These are set using `config.addTransform`, `config.addFlag`, `config.addFlagToTag`. All of those also have a removal variant. For more details on the implementation details of the default configuration, check `src/0-configure/set-defaults.js`. The defaults set are listed below.
 
 #### Flags
 
  - `'html'`: disables HTML escaping. Removing this flag removes the HTML escaping, and is not advised.
- - `'keep-trailing-newlines'`: disables the automatic removal of trailing newlines in preformatted text nodes.
  - `'preformatted'`: signals the parser to parse the children as plain text.
  - `'indent'`: Similar to `'preformatted'`, but also indents the text by some amount. The flag requires a first argument, the amount of indentation. This is in terms of spaces. If you want to convert spaces to tabs, you may provide the second argument to indicate tab size. For example, `:indent(4, 4)` indents with 1 tab (indents with 4 spaces, then replaces multiples of 4 spaces with a tab).
  - `'text-only'`: Similar to `'preformatted'`, but collapses all whitespace.
