@@ -43,4 +43,4 @@ html[lang=en]
           [vrugtehagel.nl](http://vrugtehagel.nl). It has some of my other
           projects. Essentially, it's a better "about" page than this one.
 
-    :html {{ csml.import('./includes/footer-menu.csml') }}
+    :html {{ csml.render('./includes/footer-menu.csml') }}

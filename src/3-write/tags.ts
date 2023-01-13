@@ -2,14 +2,13 @@ import { config, errors } from '../index.ts'
 
 const defineTag = ({each = sub => sub ?? '', accept, validate} = {}) => {
 	const tag = (parts, ...subs) => {
-		const newParts = [...parts]
-		newParts.raw = newParts
+		const raw = [...parts]
 		if(subs.some(item => typeof item?.then == 'function'))
 			return Promise.all(subs).then(subs => tag(parts, ...subs))
 		if(parts.length == 2 && !parts[0] && !parts[1] && accept?.(subs[0]))
-			return sub
+			return subs[0]
 		const newSubs = subs.map(sub => each(sub))
-		const result = String.raw(newParts, ...newSubs)
+		const result = String.raw({raw}, ...newSubs)
 		validate?.(result, parts, ...subs)
 		return result
 	}
