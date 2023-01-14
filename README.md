@@ -62,12 +62,12 @@ You may write a deeper nested stucture on a single line by using the child combi
 
 When the element becomes a tad long (e.g. due to long attribute values, or many class names), you may insert a newline and start the next modifier with a `&`. Note that the indentation level _must_ be the same as the element it belongs to.
 
-Some elements may not have their children parsed, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addPreformattedTag()` and `removePreformattedTag()`. For an extensive list of the default configuration, see the configuration section below.
+Some elements may not have their children parsed as HTML, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addFlagToTag()` and `removeFlagFromTag()`. For an extensive list of the default configuration, see the documentation on deno for `resetToDefaults()`.
 
 
 ### Logic
 
-You may write complex logic in your CSML, just using JavaScript (or even TypeScript!). For large blocks of script, use `@script`; its contents will not be parsed, but rather executed as-is. Note that you may also include regular scripts, ones that won't be executed, but rather emitted to the output, using the `script` tag. For in-template logic, CSML provides a simpler way of expressing statements such as `for`, `if`, `else`, or `while`. Simply start the line with `@`, and its children will be wrapped in a regular JavaScript block (that is, it will wrap curly braces around it). You may also write a statement like this on the same line as an element, for a more compact look. This means you can write, for example:
+You may write complex logic in your CSML, just using JavaScript. For large blocks of script, use `@script`; its contents will not be parsed, but rather executed as-is. Note that you may also include regular scripts, ones that won't be executed, but rather emitted to the output, using the `script` tag. For in-template logic, CSML provides a simpler way of expressing statements such as `for`, `if`, `else`, or `while`. Simply start the line with `@`, and its children will be wrapped in a regular JavaScript block (that is, it will wrap curly braces around it). You may also write a statement like this on the same line as an element, for a more compact look. This means you can write, for example:
 ```
   @script
     import capitalize from './helpers/capitalize.js'

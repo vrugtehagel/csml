@@ -34,7 +34,7 @@ export const csml = {
      *          from the CSML file. The HTML output is included as the default
      *          export.
      */
-    async import(csmlModule: string | URL, args?: any): Promise<Module> {
+    async import(url: string | URL, args?: any): Promise<Module> {
         return await globalCSML.import(csml, args)
     },
 
@@ -56,7 +56,7 @@ export const csml = {
      *             possible to pass anything else here.
      * @returns A promise resolving to the output HTML.
      */
-    async render(csmlModule: string | URL, args?: any): Promise<string> {
+    async render(url: string | URL, args?: any): Promise<string> {
         return (await globalCSML.import(csmlModule, args)).default
     }
 
