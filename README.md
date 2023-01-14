@@ -1,6 +1,6 @@
 # CSML
 
-The templating engine with CSS & JS inspired syntax built on Deno. Keeping things compact with the indentation-based markup and custom text transformations, together with the simple-to-understand module-based system, you'll have your site up and running in no time.
+The templating engine with syntax inspired by CSS & JS, built on Deno. Keeping things compact with the indentation-based markup and custom text transformations, together with the simple-to-understand module-based system, you'll have your site up and running in no time.
 
 
 
@@ -12,23 +12,43 @@ For details on the APIs this package provides, visit [deno.land/x/csml](https://
 
 ## Examples
 
-For an example, see the `/example` folder. It contains a "project" of a single page, with some additional imported CSML files. It should give you a fairly decent idea of what CSML does, and how.
+Here's a short example highlighting what CSML can do:
 
+```
+@script
+  const title = 'Hello world!'
 
+!DOCTYPE html
+html.dark-theme[lang=en]
+  head
+    meta[charset=utf-8]
+
+    title {{ title }}
+
+  body
+    section#hero
+      header > h1 {{ title }}
+
+      p:text-only
+        Multiline text, no problem. And, handy shortcuts like __emphasized__
+        or **strong** text, even [links](https://example.com). The best part;
+        you can make these yourself, to suit your exact needs.
+    :html {{ csml.render('./footer.csml') }}
+```
 
 ## Syntax
 
-First and foremost, CSML is an indentation-based language. This makes it so that we no longer have to worry about closing tags. In almost all places, you may use interpolation of the double curly brace variety, i.e. `{{ variable }}`. CSML support single-line comments with double slashes (`// comment`). The syntax for the elements you write are based on CSS selector syntax, and the logic is all JavaScript. So, let's have a look at all this in a bit more detail.
+First and foremost, CSML is an indentation-based language. This makes it so that we no longer have to worry about closing tags. In almost all places, you may use interpolation of the double curly brace variety, i.e. `{{ variable }}`. The syntax for the elements you write are based on CSS selector syntax, and the logic is all JavaScript. So, let's have a look at all this in a bit more detail.
 
 
 ### Interpolation
 
-Interpolation can be used like `{{ so }}`. Make sure the actual content of your value does not contain `}}`, because it would end the interpolation early. To make your life a bit easier, interpolation stringifies values a bit differently based on context. Generally, it collapses `null` and `undefined` to the empty string `''`, and it will leave string values as-is. Within text, objects are stringified with `JSON.stringify` for debugging purposes; elsewhere, the usual conversion to a string is used. There are also some slight special treatments for classes and attributes, see the below section on element syntax for details.
+Interpolation can be used like `{{ so }}`. Make sure the actual content of your value does not contain `}}`, because it would end the interpolation early. To make your life a bit easier, interpolation stringifies values a bit differently based on context. Generally, it collapses `null` and `undefined` to the empty string `''`, and it will leave string values as-is. Within text, objects are stringified with `JSON.stringify` for debugging purposes; elsewhere, the usual conversion to a string is used. There are also some slight special treatments for single values in classes and attributes, see the below section on element syntax for details.
 
 
 ### Element syntax
 
-Elements are written by specifiying the following, in order:
+Elements are written by specifiying the following (the tag name must come first):
 
  - **tag name**: This is the only required one. You may use interpolation for a part or the entirety of the tag name.
  - **#id**: optional. If the value ends up being `null` or the empty string, the attribute is omitted.
@@ -40,12 +60,14 @@ The doctype may be specified by writing `!DOCTYPE` followed by the docstring (ge
 
 You may write a deeper nested stucture on a single line by using the child combinator `>`. For example, `div > span Hello!` outputs `<div><span>Hello!</span></div>`.
 
+When the element becomes a tad long (e.g. due to long attribute values, or many class names), you may insert a newline and start the next modifier with a `&`. Note that the indentation level _must_ be the same as the element it belongs to.
+
 Some elements may not have their children parsed, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addPreformattedTag()` and `removePreformattedTag()`. For an extensive list of the default configuration, see the configuration section below.
 
 
 ### Logic
 
-You may write complex logic in your CSML, just using JavaScript. For large blocks of script, use `@script`; its contents will not be parsed and executed as JavaScript. Note that you may also include regular scripts, ones that won't be executed, but rather emitted to the output, using the `script` tag. For in-template logic, CSML provides a simpler way of expressing statements such as `for`, `if`, `else`, or `while`. Simply start the line with `@`, and its children will be wrapped in a regular JavaScript block (that is, it will wrap curly braces around it). You may also write a statement like this on the same line as an element, for a more compact look. This means you can write, for example:
+You may write complex logic in your CSML, just using JavaScript (or even TypeScript!). For large blocks of script, use `@script`; its contents will not be parsed, but rather executed as-is. Note that you may also include regular scripts, ones that won't be executed, but rather emitted to the output, using the `script` tag. For in-template logic, CSML provides a simpler way of expressing statements such as `for`, `if`, `else`, or `while`. Simply start the line with `@`, and its children will be wrapped in a regular JavaScript block (that is, it will wrap curly braces around it). You may also write a statement like this on the same line as an element, for a more compact look. This means you can write, for example:
 ```
   @script
     import capitalize from './helpers/capitalize.js'
@@ -60,7 +82,7 @@ You may write complex logic in your CSML, just using JavaScript. For large block
     p There are no drinks available.
 ```
 
-Lastly, let's talk a bit about how CSML modules act. They are a little bit like JavaScript modules, in the sense that they can `import` and `export` values like them. CSML modules always provide a default export with the stringified HTML that is the result of the processed CSML file. CSML modules also take arguments, which are available inside a module through `csml.args`. The `csml` object is imported implicitly into your CSML modules, and it also has the `csml.import(url, args)` method, allowing you to easily import other CSML templates into the current file. Note that there is an important difference between ES6 modules and CSML modules; ES6 modules can only be run once, whereas CSML modules re-run every time you import them. This is, of course, necessary for reusable templates to be useful. 
+Lastly, let's talk a bit about how CSML modules act. They are a little bit like JavaScript modules, in the sense that they can `import` and `export` values like them. CSML modules always provide a default export with the stringified HTML that is the result of the processed CSML file. CSML modules also take arguments, which are available inside a module through `csml.args`. The `csml` object is imported implicitly into your CSML modules, and it also has the `csml.import(url, args)` and `csml.render(url, args)` method, allowing you to easily import other CSML templates into the current file. Note that there is an important difference between ES6 modules and CSML modules; ES6 modules only run once, whereas CSML modules re-run every time you import them. This is, of course, necessary for reusable templates to be useful and for the arguments to have any effect. 
 
 
 
