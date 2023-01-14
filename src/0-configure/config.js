@@ -3,16 +3,12 @@ import { Transform } from '../types.ts'
 
 import setDefaults from './set-defaults.ts'
 
-type FlagItem = { flag: string, callback: Transform }
-type TransformItem = { name: string, callback: Transform }
-type Item = FlagItem | TransformItem
-
 
 export default new class Config {
-	#items: Item[] = []
-	#textualFlags: Set<string> = new Set
-	#textualTags: Set<string> = new Set
-	#tags: Record<string, Record<string, string>> = {}
+	#items = []
+	#textualFlags = new Set
+	#textualTags = new Set
+	#tags = {}
 
 	addFlag(flag, transform, options = {}){
 		if(!flag) errors.throw('no-empty-transform-name')

@@ -1,14 +1,9 @@
 import { errors } from '../index.ts'
 
 
-type Registration = {
-	csml: any;
-	args: any;
-}
-
 export default new class Manager {
 	#availableId = 1
-	#registrations: Map<number, Registration> = new Map()
+	#registrations = new Map()
 
 	getNewId(){ return this.#availableId++ }
 

@@ -28,7 +28,7 @@ export default class Writer {
 	static #finalizers: Array<(root: TreeNode) => any>
 
 	#finalized = false
-	#open: Array<[number, TreeNode]> = [[-1, new TreeNode]]
+	#open = [[-1, new TreeNode]]
 	#promises = []
 	tags = tags
 

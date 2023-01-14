@@ -4,8 +4,8 @@ import Interpolation from './interpolation.ts'
 
 
 export default class Reader {
-	#source: string
-	#data: string = ''
+	#source
+	#data = ''
 
 	constructor(source){
 		this.#source = source

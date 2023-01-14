@@ -4,25 +4,70 @@
  * @module
  */
 
-import { csml, config } from './src/index.ts'
-
-export * from './src/types.ts'
+import { globalCSML, config } from './src/index.ts'
 
 /**
  * Where the magic happens.
  * 
  * The `csml` variable is available as "global" variable in CSML modules. It's
  * automatically imported, but not actually on the `window` object. Outside of
- * CSML modules, you can still use it to render or import CSML modules. * 
+ * CSML modules, you can still use it to render or import CSML modules.
  */
-export { csml }
+export const csml = {
+    /**
+     * Retrieves the arguments passed to the current module.
+     * 
+     * If there are no arguments, or if it is used outside a module, this just
+     * returns `undefined`.
+     */
+    get args(): unknown { return undefined as unknown },
+
+    /**
+     * Imports a CSML module, including the HTML and other exports.
+     * 
+     * @param url An absolute URL to a CSML module.
+     * @param args An arguments object to pass to the CSML module. The module
+     *             will be able to access this argument through `csml.args`.
+     *             While it is recommended that this is an object, it is also
+     *             possible to pass anything else here.
+     * @returns A promise resolving to a `Module` object, including all exports
+     *          from the CSML file. The HTML output is included as the default
+     *          export.
+     */
+    async import(csmlModule: string | URL, args?: any): Promise<Module> {
+        return await globalCSML.import(csml, args)
+    },
+
+    /**
+     * Renders a CSML module.
+     * 
+     * @example
+     * ```js
+     * const url = new URL('./about-page.csml', import.meta.url)
+     * const html = await csml.render(url, {name: 'vrugtehagel'})
+     * 
+     * console.log(html) // "<!DOCTYPE html><html lang=en><meta charset=utf..."
+     * ```
+     * 
+     * @param url An absolute URL to a CSML module.
+     * @param args An arguments object to pass to the CSML module. The module
+     *             will be able to access this argument through `csml.args`.
+     *             While it is recommended that this is an object, it is also
+     *             possible to pass anything else here.
+     * @returns A promise resolving to the output HTML.
+     */
+    async render(csmlModule: string | URL, args?: any): Promise<string> {
+        return (await globalCSML.import(csmlModule, args)).default
+    }
+
+}
 
 /**
  * Adds a transform to run over text nodes.
  * 
  * @example
  * ```js
- * context.addTransform('badge', (text, context) => {
+ * addTransform('badge', (text, context) => {
  *     if(context.hasParent('main'))
  *     const regex = /\[\[(\w+)\]\]/g
  *     const replacement = '<span class="badge">$1</span>'
@@ -54,7 +99,7 @@ export function removeTransform(name: string): void {
  * ```js
  * import { Marked } from 'https://deno.land/x/markdown@v2.0.0'
  * 
- * config.addFlag('markdown', (text, context) => {
+ * addFlag('markdown', (text, context) => {
  *     const markup = Marked.parse(text)
  *     return markup.content
  * }, {preformatted: true})
@@ -89,7 +134,7 @@ export function removeFlag(name: string): void {
  * 
  * @example
  * ```js
- * config.addFlagToTag('pre', ':indent(4)')
+ * addFlagToTag('pre', ':indent(4)')
  * ```
  * 
  * @param tagName The tag name to assume the flag for.
@@ -151,3 +196,64 @@ export function resetToDefaults(){
     config.resetToDefaults()
 }
 
+/** The context object passed to transforms. */
+export interface TransformContext {
+    /**
+     * Checks whether the current text node has a certain parent tag, either
+     * direct parents or any of its grandparents.
+     * 
+     * @param name The tagname for the parent to look for.
+     * @returns `true` if the given tag name exists among any of the parents of
+     *          the text node being processed, `false` otherwise.
+     */
+    hasParent(name: string): boolean;
+
+    /**
+     * Checks whether the current text node has a certain flag enabled, because
+     * it is either used on its direct parent, or any of its grandparents.
+     * 
+     * @param name The flag name for the parent to look for. This may or may
+     *             not include the colon that comes with a flag, either works.
+     * @returns `true` if the given flag exists among any of the parents of the
+     *          text node being processed. `false` otherwise.
+     */
+    hasFlag(name: string): boolean;
+
+    /**
+     * Retrieves the argument passed to the flag used on the closest parent of
+     * a certain text node, as a string.
+     * 
+     * @param name The name of the flag to retrieve. If multiple flags exist
+     *             among the parents, the _last_ one will be used.
+     * @returns If the flag does not exist among any of the text node's
+     *          parents, this returns `null`; if it is used, but does not have
+     *          an argument specified (e.g. `:flag`), the empty string is
+     *          returned; otherwise, the argument is returned.
+     */
+    getFlag(name: string): null | string;
+}
+
+/** The callback used to define flags and other transforms. */
+export interface Transform {
+    (text: string, context: TransformContext): string | null | undefined;
+}
+
+/** The type of the optional third argument to `addFlag`. */
+export interface FlagTransformOptions {
+    /**
+     * When set to `true`, will only apply the transform if the flag is _not_
+     * present. Otherwise, the transform is applied only when one of the text
+     * node's parents has the given flag.
+     * 
+     * @default {false}
+     */
+    invert?: boolean;
+
+    /**
+     * When set to `true`, switches the parser into consuming all children as
+     * plain text.
+     * 
+     * @default {false}
+     */
+    preformatted?: boolean;
+}

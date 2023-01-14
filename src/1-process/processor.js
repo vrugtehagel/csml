@@ -5,9 +5,9 @@ import definitions from './definitions.ts'
 
 
 export default class Processor {
-	#reader: Reader
+	#reader
 	#stack = []
-	#cache: {name: string, content: any} = {}
+	#cache = {name: 'manual', content: null}
 	#isFile = true
 	level = 0
 

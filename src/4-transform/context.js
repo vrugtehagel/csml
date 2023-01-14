@@ -3,8 +3,8 @@ import { config, Processor } from '../index.ts'
 
 
 export default class Context implements TransformContext {
-	#node: TreeNode
-	#parents: TreeNode[]
+	#node
+	#parents
 
 	constructor(node){
 		this.#node = node

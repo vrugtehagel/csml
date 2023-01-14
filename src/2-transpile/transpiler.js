@@ -7,7 +7,7 @@ import getFooter from './get-footer.ts'
 export default class Transpiler {
 	#tokens = []
 	#namespace = `__CSML_${crypto.randomUUID().slice(-6)}__`
-	#index: number
+	#index = -1
 	#open = []
 	#header = getHeader(this.#namespace)
 	#footer = getFooter(this.#namespace)

@@ -6,7 +6,7 @@ import { transform, Context } from './4-transform/index.ts'
 import { serialize } from './5-serialize/index.ts'
 
 import { errors } from './errors/index.ts'
-import { CSML, csml } from './csml/index.ts'
+import { CSML, globalCSML } from './csml/index.ts'
 
 config.resetToDefaults()
 Writer.setFinalizers(transform, serialize)
@@ -22,5 +22,5 @@ export {
 
 	errors,
 	CSML,
-	csml
+	globalCSML
 }

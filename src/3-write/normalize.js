@@ -39,8 +39,6 @@ export default function normalize(node){
 		if(/[\s'">/=\x00-\x20\x7F]/.test(name) || !name)
 			errors.throw('invalid-attribute-name', {name})
 
-
-
 	if(!/[a-z][-\w\u{B7}\u{C0}-\u{EFFFF}]*/ui.test(tagName))
 		errors.throw('invalid-tag-name', {name: tagName})
 	return node

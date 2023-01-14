@@ -1,6 +1,6 @@
 export default class TreeNode {
 	#children = []
-	#parentNode: TreeNode | null
+	#parentNode
 
 	get parentNode(){ return this.#parentNode }
 	get path(){ return [this, ...(this.parentNode?.path ?? [])] }
