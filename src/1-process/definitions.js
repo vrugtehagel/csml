@@ -1,6 +1,6 @@
-import { config } from '../index.ts'
+import { config } from '../index.js'
 
-import Interpolation from './interpolation.ts'
+import Interpolation from './interpolation.js'
 
 export default {
 	indentation: {regex: /^\n+ */},

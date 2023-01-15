@@ -1,8 +1,8 @@
-import { errors } from '../index.ts'
+import { errors } from '../index.js'
 
-import dictionary from './dictionary.ts'
-import getHeader from './get-header.ts'
-import getFooter from './get-footer.ts'
+import dictionary from './dictionary.js'
+import getHeader from './get-header.js'
+import getFooter from './get-footer.js'
 
 export default class Transpiler {
 	#tokens = []

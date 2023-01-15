@@ -1,4 +1,4 @@
-import { config, errors } from '../index.ts'
+import { config, errors } from '../index.js'
 
 const defineTag = ({each = sub => sub ?? '', accept, validate} = {}) => {
 	const tag = (parts, ...subs) => {

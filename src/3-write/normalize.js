@@ -1,4 +1,4 @@
-import { config, errors } from '../index.ts'
+import { config, errors } from '../index.js'
 
 
 export default function normalize(node){
@@ -6,7 +6,7 @@ export default function normalize(node){
 	if('doctype' in data) return node
 
 	const flags = {}
-	for(const item of data.flags) flags[item.name] = item.value ?? null
+	for(const item of data.flags) flags[item.name] = item.arguments ?? null
 	data.flags = flags
 	for(const name of Object.keys(flags))
 		if(!config.flagExists(name)) errors.throw('unknown-flag-name', {name})
@@ -17,14 +17,15 @@ export default function normalize(node){
 	for(const item of data.attributes){
 		if(typeof item.name != 'object') attributes[item.name] = item.value
 		else if(!item.name) continue
-		else if('value' in item) continue
-		else Object.assign(attributes, item.name)
+		else if(item.value) continue
+		else for(const [key, value] of Object.entries((item.name)))
+			attributes[key.replaceAll(/[A-Z]/g, '-$&').toLowerCase()] = value
 	}
 	attributes.id = data.id
 	if(!attributes.id) delete attributes.id
 	if('class' in attributes)
-		attributes.class += ' ' + data.classNames.join('')
-	else attributes.class = data.classNames.join('')
+		attributes.class += ' ' + data.classNames.join(' ')
+	else attributes.class = data.classNames.join(' ')
 	attributes.class = attributes.class.trim()
 	if('class' in attributes) attributes.class = attributes.class.trim()
 	if(!attributes.class) delete attributes.class

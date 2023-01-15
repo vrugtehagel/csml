@@ -1,8 +1,7 @@
-import { TransformContext } from '../types.ts'
-import { config, Processor } from '../index.ts'
+import { config, Processor } from '../index.js'
 
 
-export default class Context implements TransformContext {
+export default class Context {
 	#node
 	#parents
 

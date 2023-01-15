@@ -4,7 +4,9 @@
  * @module
  */
 
-import { globalCSML, config } from './src/index.ts'
+import { globalCSML, config } from './src/index.js'
+
+type Module = Record<any, any>
 
 /**
  * Where the magic happens.
@@ -35,7 +37,7 @@ export const csml = {
      *          export.
      */
     async import(url: string | URL, args?: any): Promise<Module> {
-        return await globalCSML.import(csml, args)
+        return await globalCSML.import(url, args)
     },
 
     /**
@@ -57,7 +59,7 @@ export const csml = {
      * @returns A promise resolving to the output HTML.
      */
     async render(url: string | URL, args?: any): Promise<string> {
-        return (await globalCSML.import(csmlModule, args)).default
+        return (await globalCSML.import(url, args)).default
     }
 
 }

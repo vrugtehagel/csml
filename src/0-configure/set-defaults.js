@@ -1,4 +1,4 @@
-import config from './config.ts'
+import config from './config.js'
 
 
 export default function setDefaults(){
@@ -14,19 +14,26 @@ export default function setDefaults(){
 
 	config.addFlag('indent', (text, context) => {
 		const args = context.getFlag('indent')
-		if(!args) return 
+		if(!args) return
 		const [amount, tabSize] = args.split(',').map(arg => Number(arg))
-		const indentString = ' '.repeat(amount)
-		const indented = `\n${text}`.replaceAll('\n', '\n' + indentString)
-			// .replace(/\n+$/, '\n')
-		if(!tabSize) return indented.slice(1)
+		const lines = text.split('\n')
+		if(lines[0] == '') lines.shift()
+		const indentationAmounts = lines
+			.filter(line => line.trim() != '')
+			.map(line => line.match(/^ */)[0].length)
+		const minIndentation = Math.min(...indentationAmounts)
+		const removeIndentationRegex = new RegExp(`^ {${minIndentation}}`)
+		for(const [index, line] of lines.entries())
+			lines[index] = line.replace(removeIndentationRegex, '')
+		for(const [index, line] of lines.entries())
+			lines[index] = ' '.repeat(amount) + line
+		if(!tabSize) return lines.join('\n')
 		if(tabSize < 0 || tabSize > 10)
 			errors.throw('indent-tabsize-out-of-range')
-		const regex = new RegExp(`\n( {${tabSize}})+`, 'g')
-		const tabIndentString = '\t'.repeat(match.length / tabSize)
-		return indented
-			.replaceAll(regex, match => '\n' + tabIndentString)
-			.slice(1)
+		const convertRegex = new RegExp(`(?<=^ *)( {${tabSize}})`, 'g')
+		for(const [index, line] of lines.entries())
+			lines[index] = line.replaceAll(convertRegex, '\t')
+		return lines.join('\n')
 	}, {preformatted: true})
 
 	config.addFlag('text-only', text => {

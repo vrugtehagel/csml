@@ -1,7 +1,6 @@
-import { errors, Processor } from '../index.ts'
-import { Transform } from '../types.ts'
+import { errors, Processor } from '../index.js'
 
-import setDefaults from './set-defaults.ts'
+import setDefaults from './set-defaults.js'
 
 
 export default new class Config {

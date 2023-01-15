@@ -1,22 +1,27 @@
-import messages from './messages.ts'
+import messages from './messages.js'
 
 export default new class Errors {
 	throw(name, data = {}){
-		if(!(name in messages)) this.throw('self', {name, action: 'throw'})
-		const {type, message, help} = messages[name]
+		const {type} = messages[name]
 		if(data.reader) this.#renderLine(data.reader, data.isFile)
-		let content = message.replace(/{(\w+)}/g, (match, name) => data[name])
-		if(help) content += '\n' + help
-		throw type(content)
+		const message = this.#getMessage(name, data)
+		throw type(message)
 	}
 
 	warn(name, data = {}){
-		if(!(name in messages)) this.throw('self', {name, action: 'warn'})
-		const {message, help} = messages[name]
 		if(data.reader) this.#renderLine(data.reader, data.isFile)
-		let content = message.replace(/{(\w+)}/g, (match, name) => data[name])
-		if(help) content += '\n' + help
-		console.warn('%c' + content, 'color:yellow')
+		const message = this.#getMessage(name, data)
+		console.warn('%c' + message, 'color:yellow')
+	}
+
+	#getMessage(name, data){
+		if(!(name in messages)) this.throw('never')
+		const definition = messages[name]
+		const applyData = text =>
+			text.replaceAll(/{(\w+)}/g, (match, name) => data[name])
+		const message = applyData(definition.message)
+		const help = definition.help ? '\n' + applyData(definition.help) : ''
+		return message + help
 	}
 
 	#renderLine(reader, isFile){

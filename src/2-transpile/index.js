@@ -1,1 +1,1 @@
-export { default as Transpiler } from './transpiler.ts'
+export { default as Transpiler } from './transpiler.js'

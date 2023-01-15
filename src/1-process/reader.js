@@ -1,6 +1,6 @@
-import { errors } from '../index.ts'
+import { errors } from '../index.js'
 
-import Interpolation from './interpolation.ts'
+import Interpolation from './interpolation.js'
 
 
 export default class Reader {

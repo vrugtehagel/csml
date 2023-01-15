@@ -1,6 +1,6 @@
-import { Processor, Transpiler } from '../index.ts'
+import { Processor, Transpiler, errors } from '../index.js'
 
-import manager from './manager.ts'
+import manager from './manager.js'
 
 
 export default class CSML {
@@ -20,6 +20,8 @@ export default class CSML {
 	get args(){ return manager.get(this.#id, 'args') }
 
 	async import(csmlModule, args){
+		if(csmlModule[0] == '.' && !this.#id)
+			errors.throw('relative-import-in-global-csml', {url: csmlModule})
 		const url = this.#location
 			? new URL(csmlModule, this.#location)
 			: new URL(csmlModule)

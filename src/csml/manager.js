@@ -1,4 +1,4 @@
-import { errors } from '../index.ts'
+import { errors } from '../index.js'
 
 
 export default new class Manager {

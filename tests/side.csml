@@ -1,0 +1,6 @@
+@script
+  const {secret} = csml.args
+
+  export const sideText = `the secret is ${secret}`
+
+div This is side.csml and the secret is sqrt({{ secret ** 2 }})

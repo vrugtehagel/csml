@@ -1,4 +1,4 @@
-const url = new URL('../index.ts', import.meta.url)
+const url = new URL('../index.js', import.meta.url)
 
 export default (namespace => `
 	const {csml, writer: ${namespace}} = await (async () => {

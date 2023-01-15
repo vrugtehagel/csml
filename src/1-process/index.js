@@ -1,1 +1,1 @@
-export { default as Processor } from './processor.ts'
+export { default as Processor } from './processor.js'

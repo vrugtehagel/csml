@@ -1,1 +1,1 @@
-export { default as Writer } from './writer.ts'
+export { default as Writer } from './writer.js'

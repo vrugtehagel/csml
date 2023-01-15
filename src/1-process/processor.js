@@ -1,7 +1,7 @@
-import { errors } from '../index.ts'
+import { errors } from '../index.js'
 
-import Reader from './reader.ts'
-import definitions from './definitions.ts'
+import Reader from './reader.js'
+import definitions from './definitions.js'
 
 
 export default class Processor {

@@ -1,8 +1,8 @@
-import { errors } from '../index.ts'
+import { errors } from '../index.js'
 
-import TreeNode from './tree-node.ts'
-import tags from './tags.ts'
-import normalize from './normalize.ts'
+import TreeNode from './tree-node.js'
+import tags from './tags.js'
+import normalize from './normalize.js'
 
 
 export default class Writer {
@@ -25,7 +25,7 @@ export default class Writer {
 		this.#finalizers = finalizers
 	}
 
-	static #finalizers: Array<(root: TreeNode) => any>
+	static #finalizers
 
 	#finalized = false
 	#open = [[-1, new TreeNode]]
@@ -37,15 +37,18 @@ export default class Writer {
 	get #bottom(){ return this.#open[0][1] }
 
 	doctype(level, doctype){
-		if(this.#finalized) errors.throw('never')
-		while(this.#topLevel >= level) this.#open.pop()
+		this.level(level)
 		const node = this.#createNode({doctype})
 		this.#top.append(node)
 	}
 
-	write(level, ...things){
+	level(level){
 		if(this.#finalized) errors.throw('never')
 		while(this.#topLevel >= level) this.#open.pop()
+	}
+
+	write(level, ...things){
+		this.level(level)
 		const hasText = typeof things.at(-1) == 'string'
 			|| things.at(-1) == null
 			|| typeof things.at(-1).then == 'function'

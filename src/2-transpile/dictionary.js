@@ -5,6 +5,10 @@ export default {
 	},
 	script: (transpiler, token) => token + '\n',
 	statement: (transpiler, token, content) => {
+		const call = transpiler.call('level') + '\n'
+		return transpiler.transpile('inlineStatement', token, call + content)
+	},
+	inlineStatement: (transpiler, token, content) => {
 		return `${token}/**/\n{\n${content}}\n`
 	},
 	textNode: (transpiler, token) => {
@@ -60,8 +64,9 @@ export default {
 			.map(descendant => transpiler.transpile('descendant', descendant))
 		if(last.text) args.push(transpiler.tag('text', last.text))
 		let result = transpiler.call('write', ...args)
-		if(!last.statement) return result + content
-		result += transpiler.transpile('statement', last.statement, content)
+		const {statement} = last
+		if(!statement) return result + content
+		result += transpiler.transpile('inlineStatement', statement, content)
 		return result
 	}
 }

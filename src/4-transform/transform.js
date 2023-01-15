@@ -1,6 +1,6 @@
-import { config } from '../index.ts'
+import { config } from '../index.js'
 
-import Context from './context.ts'
+import Context from './context.js'
 
 
 export default function transform(root){

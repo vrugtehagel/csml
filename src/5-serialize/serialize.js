@@ -10,6 +10,7 @@ export default function serialize(node){
 	if('text' in data) return data.text
 	const {tagName, attributes} = data
 	const attributeString = Object.entries(attributes)
+		.sort(([a], [b]) => attributeNameOrder(a) - attributeNameOrder(b))
 		.map(([name, value]) => serializeAttribute(name, value))
 		.join('')
 	const openingTag = `<${tagName}${attributeString}>`
@@ -23,4 +24,10 @@ function serializeAttribute(name, value){
 	if(!value) return name
 	if(!/[ ='"`<>]/.test(value)) return ` ${name}=${value}`
 	return ` ${name}="${value.replaceAll('"', '&quot;')}"`
+}
+
+function attributeNameOrder(name){
+	if(name == 'id') return 1
+	if(name == 'class') return 2
+	return 3
 }

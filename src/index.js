@@ -1,12 +1,12 @@
-import { config } from './0-configure/index.ts'
-import { Processor } from './1-process/index.ts'
-import { Transpiler } from './2-transpile/index.ts'
-import { Writer } from './3-write/index.ts'
-import { transform, Context } from './4-transform/index.ts'
-import { serialize } from './5-serialize/index.ts'
+import { config } from './0-configure/index.js'
+import { Processor } from './1-process/index.js'
+import { Transpiler } from './2-transpile/index.js'
+import { Writer } from './3-write/index.js'
+import { transform, Context } from './4-transform/index.js'
+import { serialize } from './5-serialize/index.js'
 
-import { errors } from './errors/index.ts'
-import { CSML, globalCSML } from './csml/index.ts'
+import { errors } from './errors/index.js'
+import { CSML, globalCSML } from './csml/index.js'
 
 config.resetToDefaults()
 Writer.setFinalizers(transform, serialize)

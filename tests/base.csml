@@ -1,0 +1,98 @@
+@script
+	const title = 'Test page.'
+
+!DOCTYPE html
+html[lang=en]
+	meta[charset=utf-8]
+
+	title {{ title }}
+
+	main
+		header > h1 {{ title }}
+
+		section#tag-name-tests
+			d{{ 'i' }}v
+			{{ 'div' }}
+			di{{ null }}v
+
+		section#id-tests
+			div#id-0
+			div#i{{ 'd' }}-1
+			div#{{ 'id-2' }}
+			div#{{ null }}
+			div#{{ '' }}
+
+		section#class-tests
+			div.foo.bar
+			div.f{{ 'o' }}o.{{ 'bar' }}
+			div.{{ ['foo', 'bar'] }}
+			div.{{ 'foo bar' }}
+			div.{{ [] }}
+			div.{{ null }}
+
+		section#attribute-tests
+			div[ data-attr = value ]
+			div[ data-attr = "value" ]
+			div[data-attr="value"]
+			div[{{ {dataAttr: 'value'} }}]
+			div[data-attr="val{{ null }}ue"]
+			div[data-attr="va{{ 'l' }}ue"]
+			div[data-attr=va{{ 'l' }}ue]
+			div[data-attr={{ null }}]
+			div[data-attr="{{ null }}"]
+
+		section#flag-tests
+			div:html <div>test</div>
+			div:text-only
+				div test
+			div:preformatted
+				div
+				test
+			div:indent(2, 1)
+						div
+					test
+			:text-only
+				div test
+
+		section#element-tests
+			div.foo
+			&.bar
+			&[data-attr=value]
+			&#id-3
+			&:text-only
+				div test
+			div > div.foo > div
+			&.bar > div#id-4
+
+		section#interpolation-tests
+			div {{ 'foo' }} `bar ${ baz }` {{ '`' }} qux 
+
+		section#statement-tests
+			div @for(const [index, item] of ['test', 'test'].entries())
+				div {{ item }} {{ index }}
+			div
+				@for(const [index, item] of ['test', 'test'].entries())
+					div {{ item }} {{ index }}
+			div
+			@for(const [index, item] of ['test', 'test'].entries())
+				div {{ item }} {{ index }}
+			@if(true)
+				div.if-true
+			@else
+				div.if-true-else
+			@if(false)
+				div.if-false
+			@else
+				div.if-false-else
+
+		section#import-tests
+			@script
+				const sideModule = await csml.import('./side.csml', {secret: 23})
+				const {sideText} = sideModule
+
+			div {{ sideText }}
+
+			:html {{ csml.render('./side.csml', {secret: 55}) }}
+
+		section#transform-tests
+			div __emphasized__ **strong [link](https://example.com)** ``code``
