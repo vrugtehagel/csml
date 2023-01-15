@@ -166,17 +166,19 @@ export function removeFlagFromTag(tagName: string, flag: string){
  * ## Flags
  *  - `:html`: disables HTML escaping, useful for inline rendering.
  *    Removing this flag removes the HTML escaping, and is not advised.
- *  - `:preformatted`: signals the parser to parse the indented content
- *    as text, but does not further process the text.
- *  - `:text-only`: Similar to `:preformatted`, but collapses all
- *    whitespace.
- *  - `:indent(amount, tabSize)`: Similar to `'preformatted'`, but also
- *     indents the text by some amount. The flag requires a first argument,
- *     the amount of indentation. This is in terms of spaces. If you want
- *     to convert spaces to tabs, you may provide the second argument to
- *     indicate tab size. For example, `:indent(4, 4)` indents with 1 tab
- *     (indents with 4 spaces, then replaces multiples of 4 spaces with a
- *     tab).
+ *  - `:preformatted`: , but does not further process the text.
+ *  - `:text-only`: signals the parser to parse the indented content as text,
+ *    collapsing all whitespace.
+ *  - `:indent(amount, tabSize)`: Like :text-only, this flag signals to the
+ *    parser that its contents are all text. However, it preserves whitespace,
+ *    and indents the text by some amount. The flag requires a first argument,
+ *    the amount of indentation. This is in terms of spaces, and may be 0. If
+ *    you want to convert spaces to tabs, you may provide the second argument
+ *    to indicate tab size. For example, `:indent(4, 4)` indents with 1 tab
+ *    (indents with 4 spaces, then replaces multiples of 4 spaces with a
+ *    tab). If your source code uses tabs for indentation (and if that is what
+ *    you want this text to be indented with) then it is recommended to set the
+ *    tabSize parameter to 1.
  * 
  * ## Transforms
  *  - `emphasis`: Replaces text wrapped in double underscores with `<em>`

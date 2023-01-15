@@ -45,7 +45,7 @@ html[lang=en]
 			div:html <div>test</div>
 			div:text-only
 				div test
-			div:preformatted
+			div:indent(0)
 				div
 				test
 			div:indent(2, 1)

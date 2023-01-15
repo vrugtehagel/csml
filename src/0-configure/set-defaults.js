@@ -10,8 +10,6 @@ export default function setDefaults(){
 			.replaceAll('>', '&gt;')
 	}, {invert: true})
 
-	config.addFlag('preformatted', text => null, {preformatted: true})
-
 	config.addFlag('indent', (text, context) => {
 		const args = context.getFlag('indent')
 		if(!args) return
@@ -64,8 +62,8 @@ export default function setDefaults(){
 	})
 
 	config.addFlagToTag('title', ':text-only')
-	config.addFlagToTag('script', ':preformatted')
-	config.addFlagToTag('style', ':preformatted')
-	config.addFlagToTag('textarea', ':preformatted')
+	config.addFlagToTag('script', ':indent(0)')
+	config.addFlagToTag('style', ':indent(0)')
+	config.addFlagToTag('textarea', ':indent(0)')
 
 }
