@@ -15,14 +15,14 @@ type Module = Record<any, any>
  * automatically imported, but not actually on the `window` object. Outside of
  * CSML modules, you can still use it to render or import CSML modules.
  */
-export const csml = {
+export const csml = new class CSML {
     /**
      * Retrieves the arguments passed to the current module.
      * 
      * If there are no arguments, or if it is used outside a module, this just
      * returns `undefined`.
      */
-    get args(): unknown { return undefined as unknown },
+    get args(): unknown { return undefined as unknown }
 
     /**
      * Imports a CSML module, including the HTML and other exports.
@@ -38,7 +38,7 @@ export const csml = {
      */
     async import(url: string | URL, args?: any): Promise<Module> {
         return await globalCSML.import(url, args)
-    },
+    }
 
     /**
      * Renders a CSML module.
