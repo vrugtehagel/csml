@@ -181,7 +181,6 @@ export function removeFlagFromTag(tagName: string, flag: string){
  * ## Flags
  *  - `:html`: disables HTML escaping, useful for inline rendering.
  *    Removing this flag removes the HTML escaping, and is not advised.
- *  - `:preformatted`: , but does not further process the text.
  *  - `:text-only`: signals the parser to parse the indented content as text,
  *    collapsing all whitespace.
  *  - `:indent(amount, tabSize)`: Like :text-only, this flag signals to the
@@ -193,7 +192,7 @@ export function removeFlagFromTag(tagName: string, flag: string){
  *    (indents with 4 spaces, then replaces multiples of 4 spaces with a
  *    tab). If your source code uses tabs for indentation (and if that is what
  *    you want this text to be indented with) then it is recommended to set the
- *    tabSize parameter to 1.
+ *    `tabSize` parameter to 1.
  * 
  * ## Transforms
  *  - `emphasis`: Replaces text wrapped in double underscores with `<em>`
@@ -206,10 +205,10 @@ export function removeFlagFromTag(tagName: string, flag: string){
  *    `[text content](https://example.com)`
  * 
  * ## Flags built into tags
- *  - `title` tags are `:text-only` by default;
- *  - `script` tags are `:preformatted`;
- *  - `style` tags are `:preformatted`;
- *  - `textarea` tags are `:preformatted`.
+ *  - `title` tags have `:text-only` built-in;
+ *  - `script` tags have `:indent(0)`;
+ *  - `style` tags have `:indent(0)`;
+ *  - `textarea` tags have `:indent(0)`.
  */
 export function resetToDefaults(){
     config.resetToDefaults()

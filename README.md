@@ -43,7 +43,7 @@ First and foremost, CSML is an indentation-based language. This makes it so that
 
 ### Interpolation
 
-Interpolation can be used like `{{ so }}`. Make sure the actual content of your value does not contain `}}`, because it would end the interpolation early. To make your life a bit easier, interpolation stringifies values a bit differently based on context. Generally, it collapses `null` and `undefined` to the empty string `''`, and it will leave string values as-is. Within text, objects are stringified with `JSON.stringify` for debugging purposes; elsewhere, the usual conversion to a string is used. There are also some slight special treatments for single values in classes and attributes, see the below section on element syntax for details.
+Interpolation can be used like `{{ so }}`. Make sure the actual content of your value does not contain `}}`, because it would end the interpolation early. To make your life a bit easier, interpolation stringifies values a bit differently based on context. Generally, it collapses `null` and `undefined` to the empty string `''`, and it will leave string values as-is. Within text, objects are stringified with `JSON.stringify` for debugging purposes; elsewhere, the usual conversion to a string is used. There are also some slight special treatments for single values in classes and attributes, see the below section on element syntax for details. For async code, in particular `csml.render`, it should be noted that interpolation allows un-awaited promises. The whole module, before finishing execution, will wait for all interpolated promises to be resolved, but it will do so in parallel. Essentially, `{{ await getAsyncThing() }}` is allowed, but generally less efficient than `{{ getAsyncThing() }}`.
 
 
 ### Element syntax
@@ -52,8 +52,8 @@ Elements are written by specifiying the following (the tag name must come first)
 
  - **tag name**: This is the only required one. You may use interpolation for a part or the entirety of the tag name.
  - **#id**: optional. If the value ends up being `null` or the empty string, the attribute is omitted.
- - **.classname**: You may specifiy one or more classnames. When you interpolate values, you may also provide an array, and each element of the array is then used as a class. Alternatively, you may provide space-separated strings for a single class value; they are then interpreted as multiple classes. For example, `div.{{ ['foo', 'bar'] }}` and `div.{{ 'foo bar' }}` are both equivalent to `div.foo.bar` and output `<div class="foo bar">`.
- - **[attribute]**: There are a few accepted forms for these. You may use single or double quotes around your values, or, in some cases, leave the quotes out, just like in HTML and CSS. For boolean attributes, you may write them like `[hidden]`, without a value at all. When using interpolation for the _entire_ value, if the interpolation results in `null` or `undefined`, the attribute is omitted. For example, `button[disabled={{ null }}]` results in just `<button>`. Lastly, for logic-heavy elements, you may specify attributes in bulk by providing an object of attribute-value combinations withing the square brackets. For example, let's say we've got a `const attrs` with the value `{foo: '23', bar: 'baz'}`, then `my-element[{{ attrs }}]` will result in `<my-element foo=23 bar=baz>`.
+ - **.classname**: You may specifiy one or more classnames. When you interpolate values, you may also provide an array, and each element of the array is then used as a class. Alternatively, you may provide space-separated strings for a single class value; they are then interpreted as multiple classes. Lastly, you may use an object, and all keys with truthy values will be used as a class. For example, `div.{{ ['foo', 'bar'] }}`, `div.{{ {foo: true, bar: 23, baz: null} }}` and `div.{{ 'foo bar' }}` are all equivalent to `div.foo.bar` and output `<div class="foo bar">`.
+ - **[attribute]**: There are a few accepted forms for these. You may use single or double quotes around your values, or, in some cases, leave the quotes out, just like in HTML and CSS. For boolean attributes, you may write them like `[hidden]`, without a value at all. When using interpolation for the _entire_ value, if the interpolation results in `null` or `undefined`, the attribute is omitted. For example, `button[disabled={{ null }}]` results in just `<button>`. Lastly, for logic-heavy elements, you may specify attributes in bulk by providing an object of attribute-value combinations within the square brackets (camelCase keys will be converted to kebab-case). For example, let's say we've got a `const attrs` with the value `{foo: '23', barBaz: 'qux'}`, then `my-element[{{ attrs }}]` will result in `<my-element foo=23 bar-baz=qux>`.
  - **:flag**: reusing the pseudo-class syntax from CSS, this can be used to alter the behavior of text inside an element. There are a few defaults set already, but you may remove those or create your own using `addFlag`. You can also provide arguments to a flag, like in CSS, e.g. `:indent(4)`. Note that interpolation is permitted in flag arguments, but _not_ in flag names.
 
 The doctype may be specified by writing `!DOCTYPE` followed by the docstring (generally, just `!DOCTYPE html`).
@@ -62,7 +62,7 @@ You may write a deeper nested stucture on a single line by using the child combi
 
 When the element becomes a tad long (e.g. due to long attribute values, or many class names), you may insert a newline and start the next modifier with a `&`. Note that the indentation level _must_ be the same as the element it belongs to.
 
-Some elements may not have their children parsed as HTML, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addFlagToTag()` and `removeFlagFromTag()`. For an extensive list of the default configuration, see the documentation on deno for `resetToDefaults()`.
+Some elements may not have their children parsed as HTML, like `script` or `style`, and simply assume the content is always text-only. To alter this, use `addFlagToTag()` and `removeFlagFromTag()`. For an extensive list of the default configuration, see the documentation on deno for [`resetToDefaults()`](https://deno.land/x/csml/mod.ts?s=resetToDefaults).
 
 
 ### Logic
@@ -81,11 +81,29 @@ You may write complex logic in your CSML, just using JavaScript. For large block
   @else
     p There are no drinks available.
 ```
+Keep in mind that a statement alone contributes to the indentation hierarchy; so, the code below outputs `<div></div><span></span>` (i.e. a `span` as sibling of the `div`, not the child):
+```
+div
+@if(true)
+  span
+```
+whereas
+```
+div
+  @if(true)
+    span
+```
+is equivalent to
+```
+div @if(true)
+  span
+```
+and outputs `<div><span></span></div>`, that is, the `span` would be the child of the `div`.
 
-Lastly, let's talk a bit about how CSML modules act. They are a little bit like JavaScript modules, in the sense that they can `import` and `export` values like them. CSML modules always provide a default export with the stringified HTML that is the result of the processed CSML file. CSML modules also take arguments, which are available inside a module through `csml.args`. The `csml` object is imported implicitly into your CSML modules, and it also has the `csml.import(url, args)` and `csml.render(url, args)` method, allowing you to easily import other CSML templates into the current file. Note that there is an important difference between ES6 modules and CSML modules; ES6 modules only run once, whereas CSML modules re-run every time you import them. This is, of course, necessary for reusable templates to be useful and for the arguments to have any effect. 
+Lastly, let's talk a bit about how CSML modules act. They are a little bit like JavaScript modules, in the sense that they can `import` and `export` values like them. CSML modules always provide a default export with the stringified HTML that is the result of the processed CSML file. CSML modules also take arguments, which are available inside a module through `csml.args`. The `csml` object is imported implicitly into your CSML modules, and has the `csml.import(url, args)` and `csml.render(url, args)` methods, allowing you to easily import other CSML templates into the current file. Note that there is an important difference between ES6 modules and CSML modules; ES6 modules only run once, whereas CSML modules re-run every time you import them. This is, of course, necessary for reusable templates to be useful and for the arguments to have any effect. Also, when importing modules to be rendered in another, use the `:html` flag followed by your `{{ csml.render(...) }}` statement; without the flag, the content will be HTML-escaped.
 
 
 
 ### Configuration
 
-CSML offers transforms for text nodes so that writing big chunks of text becomes a lot nicer to do. It also offers those for flags specifically, and lastly, it allows for registering html tags to have a certain flag built-in. These are set using `config.addTransform`, `config.addFlag`, `config.addFlagToTag`. All of those also have a removal variant. For more details on the implementation details of the default configuration, check `src/0-configure/set-defaults.js`. To view the defaults, see the documentation on [deno.land/x/csml](https://deno.land/x/csml`).
+CSML offers transforms for text nodes so that writing big chunks of text becomes a lot nicer to do. It also offers those for flags specifically, and lastly, it allows for registering html tags to have a certain flag built-in. These are set using `config.addTransform`, `config.addFlag`, `config.addFlagToTag`. All of those also have a removal variant. For more details on the implementation details of the default configuration (as examples), check `src/0-configure/set-defaults.js`. To view the defaults, see the documentation on [deno.land/x/csml](https://deno.land/x/csml`).
