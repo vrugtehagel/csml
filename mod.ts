@@ -9,20 +9,22 @@ import { globalCSML, config } from './src/index.js'
 type Module = Record<any, any>
 
 /**
- * Where the magic happens.
+ * The interface for the `csml` export.
  * 
  * The `csml` variable is available as "global" variable in CSML modules. It's
- * automatically imported, but not actually on the `window` object. Outside of
- * CSML modules, you can still use it to render or import CSML modules.
+ * global in the sense that it is automatically imported, but it's not actually
+ * on the `window` object. Outside of CSML modules, you can still use it to
+ * render or import CSML modules, but of course, you have to import it
+ * yourself.
  */
-export const csml = new class CSML {
+export interface CSML {
     /**
      * Retrieves the arguments passed to the current module.
      * 
      * If there are no arguments, or if it is used outside a module, this just
      * returns `undefined`.
      */
-    get args(): unknown { return undefined as unknown }
+    readonly args: unknown
 
     /**
      * Imports a CSML module, including the HTML and other exports.
@@ -36,9 +38,7 @@ export const csml = new class CSML {
      *          from the CSML file. The HTML output is included as the default
      *          export.
      */
-    async import(url: string | URL, args?: any): Promise<Module> {
-        return await globalCSML.import(url, args)
-    }
+    import(url: string | URL, args?: any): Promise<Module>
 
     /**
      * Renders a CSML module.
@@ -58,6 +58,21 @@ export const csml = new class CSML {
      *             possible to pass anything else here.
      * @returns A promise resolving to the output HTML.
      */
+    render(url: string | URL, args?: any): Promise<string>
+
+}
+
+/**
+ * Import and render CSML modules.
+ */
+
+export const csml: CSML = {
+    args: undefined,
+
+    async import(url: string | URL, args?: any): Promise<Module> {
+        return await globalCSML.import(url, args)
+    },
+
     async render(url: string | URL, args?: any): Promise<string> {
         return (await globalCSML.import(url, args)).default
     }
