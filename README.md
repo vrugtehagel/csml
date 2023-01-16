@@ -1,7 +1,8 @@
+<img width="100%" alt="image" src="https://user-images.githubusercontent.com/41021050/212775994-e54ce75e-602a-4767-9ba0-739b8497c2ca.png">
+
 # CSML
 
 The templating engine with syntax inspired by CSS & JS, built on Deno. Keeping things compact with the indentation-based markup and custom text transformations, together with the simple-to-understand module-based system, you'll have your site up and running in no time.
-
 
 
 ## APIs
