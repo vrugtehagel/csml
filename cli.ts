@@ -1,6 +1,8 @@
 /**
  * The entry point for CSML CLI.
  * 
+ * @module
+ * 
  * You may use the CLI instead of the JS API, though functionality is more
  * limiting. You may specify one input file to be processed. It will write to
  * stdout by default, but you may write to a file by specifying `--out`.
