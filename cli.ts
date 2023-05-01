@@ -24,7 +24,7 @@
  * @module
  * 
  * @example
- * ```shell
+ * ```bash
  * deno run https://deno.land/x/csml/cli.ts \
  *   ./mymarkup.csml \
  *   --out=./index.html \
