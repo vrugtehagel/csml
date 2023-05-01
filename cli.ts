@@ -24,11 +24,11 @@
  * @module
  * 
  * @example
- * ```bash
+ * ```shell
  * deno run https://deno.land/x/csml/cli.ts \
  *   ./mymarkup.csml \
  *   --out=./index.html \
- * 	 --add-flag-to-tag="pre:indent(0)" \
+ *   --add-flag-to-tag="pre:indent(0)" \
  *   --add-flag-to-tag=h1:text-only \
  *   --remove-transform=code \
  *   --arg-pageTitle="Hello world!" \
