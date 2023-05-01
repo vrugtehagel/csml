@@ -1,7 +1,6 @@
 /**
  * The entry point for CSML CLI.
  * 
- * @module
  * 
  * You may use the CLI instead of the JS API, though functionality is more
  * limiting. You may specify one input file to be processed. It will write to
@@ -22,8 +21,10 @@
  * `--arg-fooBar=hello` will pass `{fooBar: 'hello'}` to the CSML module being
  * rendered.
  * 
+ * @module
+ * 
  * @example
- * ```sh
+ * ```bash
  * deno run https://deno.land/x/csml/cli.ts \
  *   ./mymarkup.csml \
  *   --out=./index.html \
