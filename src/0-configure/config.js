@@ -77,6 +77,14 @@ export default new class Config {
 		return this.#items.some(item => item.flag == name)
 	}
 
+	doesTagHaveFlag(tagName, flag){
+		return tagName in this.#tags && flag in this.#tags[tagName]
+	}
+
+	getFlagFromTag(tagName, flag){
+		return this.#tags[tagName]?.[flag] ?? null
+	}
+
 	transformExists(name){
 		return this.#items.some(item => item.name == name)
 	}

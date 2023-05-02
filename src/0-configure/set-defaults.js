@@ -2,7 +2,6 @@ import config from './config.js'
 
 
 export default function setDefaults(){
-
 	config.addFlag('html', (text, context) => {
 		return text
 			.replaceAll(/&(?![a-z]+;)(?!#x?[a-f\d]+;)/ig, '&amp;')
@@ -63,7 +62,9 @@ export default function setDefaults(){
 
 	config.addFlagToTag('title', ':text-only')
 	config.addFlagToTag('script', ':indent(0)')
+	config.addFlagToTag('script', ':html')
 	config.addFlagToTag('style', ':indent(0)')
+	config.addFlagToTag('style', ':html')
 	config.addFlagToTag('textarea', ':indent(0)')
 
 }

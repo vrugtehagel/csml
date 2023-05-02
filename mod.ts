@@ -188,8 +188,8 @@ export function removeFlagFromTag(tagName: string, flag: string){
  * 
  * ## Flags built into tags
  *  - `title` tags have `:text-only` built-in;
- *  - `script` tags have `:indent(0)`;
- *  - `style` tags have `:indent(0)`;
+ *  - `script` tags have `:indent(0)` and `:html`;
+ *  - `style` tags have `:indent(0)` and `:html`;
  *  - `textarea` tags have `:indent(0)`.
  */
 export function resetToDefaults(){

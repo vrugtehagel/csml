@@ -3,4 +3,6 @@
 
   export const sideText = `the secret is ${secret}`
 
-div This is side.csml and the secret is sqrt({{ secret ** 2 }})
+foo-bar
+  This is side.csml
+  and the secret is sqrt({{ secret ** 2 }})
