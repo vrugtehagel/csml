@@ -80,9 +80,13 @@ export default {
 		processor.try('whitespace')
 		processor.expect('quote')
 		const quote = processor.get()
+		if(processor.if(quote))
+			return processor.try('whitespace').expect(']').close()
 		if(quote == '\'') processor.expect('singleQuotedString')
 		else if(!quote) processor.expect('unquotedString')
 		else processor.expect('doubleQuotedString')
+
+
 		processor.as('value')
 		if(quote) processor.expect(quote)
 		processor.try('whitespace')

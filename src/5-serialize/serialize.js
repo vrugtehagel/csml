@@ -21,7 +21,7 @@ export default function serialize(node){
 
 function serializeAttribute(name, value){
 	if(name == 'class') value = value.trim().replaceAll(/\s{2,}/g, ' ')
-	if(!value) return name
+	if(!value) return ` ${name}`
 	if(!/[ ='"`<>]/.test(value)) return ` ${name}=${value}`
 	return ` ${name}="${value.replaceAll('"', '&quot;')}"`
 }

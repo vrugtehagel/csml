@@ -29,7 +29,7 @@ export default {
 	},
 	attribute: (transpiler, token) => {
 		const name = transpiler.tag('attributeName', token.name)
-		const value = transpiler.tag('attributeValue', token.value)
+		const value = transpiler.tag('attributeValue', token.value ?? '``')
 		return `{name:${name},value:${value}}`
 	},
 	attributes: (transpiler, token) => {

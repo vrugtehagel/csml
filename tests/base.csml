@@ -40,6 +40,8 @@ html[lang=en]
 			div[data-attr=va{{ 'l' }}ue]
 			div[data-attr={{ null }}]
 			div[data-attr="{{ null }}"]
+			div[data-attr]
+			div[data-attr=""]
 
 		section#flag-tests
 			div:html <div>test</div>
