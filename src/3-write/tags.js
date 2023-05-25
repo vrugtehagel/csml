@@ -19,7 +19,20 @@ export default {
 	doctype: defineTag(),
 	tagName: defineTag(),
 	flagArguments: defineTag(),
-	text: defineTag(),
+	text: defineTag({
+		each: sub => {
+			if(sub == null) return sub ?? ''
+			if(typeof sub != 'object') return sub
+			const seen = new Set
+			return JSON.stringify(sub, (key, value) => {
+				if(!value || typeof value != 'object') return value
+				if(typeof value == 'function') return
+				if(seen.has(value)) return '[Circular]'
+				seen.add(value)
+				return value
+			})
+		}
+	}),
 	id: defineTag({accept: value => value == null}),
 	className: defineTag({
 		each: sub => {

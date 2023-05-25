@@ -2,7 +2,13 @@
   const {secret} = csml.args
 
   export const sideText = `the secret is ${secret}`
+  const object = {foo: 'bar', baz: 23}
+  const array = ['foo', 'bar', 'baz']
 
 foo-bar
   This is side.csml
   and the secret is sqrt({{ secret ** 2 }})
+
+ul
+  li object: {{ object }}
+  li array: {{ array }}
