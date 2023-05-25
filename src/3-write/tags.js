@@ -21,7 +21,7 @@ export default {
 	flagArguments: defineTag(),
 	text: defineTag({
 		each: sub => {
-			if(sub == null) return sub ?? ''
+			if(sub == null) return ''
 			if(typeof sub != 'object') return sub
 			const seen = new Set
 			return JSON.stringify(sub, (key, value) => {
