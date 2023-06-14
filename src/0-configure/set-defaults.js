@@ -38,19 +38,19 @@ export default function setDefaults(){
 	}, {preformatted: true})
 
 	config.addTransform('emphasis', text => {
-		return text.replaceAll(/__((?:[^_]|_(?!_))+)__/g, '<em>$1</em>')
+		return text.replaceAll(/__(.+?)__/g, '<em>$1</em>')
 	})
 
 	config.addTransform('strong', text => {
-		return text.replaceAll(/\*\*((?:[^*]|\*(?!\*))+)\*\*/g, '<strong>$1</strong>')
+		return text.replaceAll(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
 	})
 
 	config.addTransform('code', text => {
-		return text.replaceAll(/``((?:[^`]|`(?!`))+)``/g, '<code>$1</code>')
+		return text.replaceAll(/``(.+?)``/g, '<code>$1</code>')
 	})
 
 	config.addTransform('link', text => {
-		const regex = /\[(\b[^\]]+\b)\]\(([^)]+)\)/g
+		const regex = /\[(.*?)\]\((.+?)\)/g
 		return text.replaceAll(regex, (match, content, url) => {
 			url = url.replaceAll(/&(?![a-z]+;)(?!#x?[a-f\d]+;)/ig, '&amp;')
 			const href = /[ ='"`<>]/.test(url)

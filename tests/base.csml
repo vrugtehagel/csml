@@ -97,4 +97,4 @@ html[lang=en]
 			:html {{ csml.render('./side.csml', {secret: 55}) }}
 
 		section#transform-tests
-			div __emphasized__ **strong [link](https://example.com)** ``code``
+			div __emphasized__ **strong [``codelink``](https://example.com)**
