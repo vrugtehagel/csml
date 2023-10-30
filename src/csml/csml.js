@@ -1,4 +1,5 @@
 import { Processor, Transpiler, errors } from '../index.js'
+import { toFileUrl } from 'https://deno.land/std@0.185.0/path/mod.ts'
 
 import manager from './manager.js'
 
@@ -20,11 +21,9 @@ export default class CSML {
 	get args(){ return manager.get(this.#id, 'args') }
 
 	async import(csmlModule, args){
-		if(csmlModule[0] == '.' && !this.#id)
-			errors.throw('relative-import-in-global-csml', {url: csmlModule})
-		const url = this.#location
-			? new URL(csmlModule, this.#location)
-			: new URL(csmlModule)
+		const url = this == CSML.#global
+			? toFileUrl(await Deno.realPath(csmlModule))
+			: new URL(csmlModule, this.#location)
 		const id = manager.getNewId()
 		manager.register(id, {args})
 		const content = await Deno.readTextFile(url)
