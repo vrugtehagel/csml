@@ -62,10 +62,5 @@ export default {
 	'indent-tabsize-out-of-range': {
 		type: RangeError,
 		message: 'The tabSize argument in :indent() must be between 0 and 10.'
-	},
-	'relative-import-in-global-csml': {
-		type: TypeError,
-		message: 'Cannot import relative URL ({url}) outside of a .csml file.',
-		help: 'Try passing new URL(\'{url}\', import.meta.url) instead.'
 	}
 }

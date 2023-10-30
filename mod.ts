@@ -20,14 +20,16 @@ type Module = Record<any, any>
 export interface CSML {
     /**
      * Retrieves the arguments passed to the current module. If there are no
-     * arguments, or if it is used outside a module, this just returns
+     * arguments, or if it is used outside a module, this just evaluates to
      * `undefined`.
      */
     readonly args: unknown
 
     /**
      * Imports a CSML module, including the HTML and other, user-defined
-     * exports. Every time this is called, the module is re-run.
+     * exports. Every time this is called, the module is re-run. If called
+     * inside a CSML module, the URL is relative to the module itself; outside
+     * of a CSML module, it resolves to the current working directory.
      */
     import(url: string | URL, args?: any): Promise<Module>
 

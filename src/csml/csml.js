@@ -20,17 +20,15 @@ export default class CSML {
 	get args(){ return manager.get(this.#id, 'args') }
 
 	async import(csmlModule, args){
-		if(csmlModule[0] == '.' && !this.#id)
-			errors.throw('relative-import-in-global-csml', {url: csmlModule})
-		const url = this.#location
-			? new URL(csmlModule, this.#location)
-			: new URL(csmlModule)
+		const url = this == CSML.#global
+			? await Deno.realPath(csmlModule)
+			: new URL(csmlModule, this.#location).pathname
 		const id = manager.getNewId()
 		manager.register(id, {args})
 		const content = await Deno.readTextFile(url)
 		const tokens = Processor.process(content)
 		const code = Transpiler.transpile(tokens)
-		const tsURL = new URL(`${url}.${id}.ts`)
+		const tsURL = `${url}.${id}.ts`
 		await Deno.writeTextFile(tsURL, code, {create: true})
 		const controller = new AbortController
 		const {signal} = controller
