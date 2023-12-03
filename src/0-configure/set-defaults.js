@@ -50,7 +50,7 @@ export default function setDefaults(){
 	})
 
 	config.addTransform('link', text => {
-		const regex = /\[(.*?)\]\((?=https?:\/\/|\.|\/)(.+?)\)/g
+		const regex = /\[([^\[\]]*)\]\((?=https?:\/\/|\.|\/)(.+?)\)/g
 		return text.replaceAll(regex, (match, content, url) => {
 			url = url.replaceAll(/&(?![a-z]+;)(?!#x?[a-f\d]+;)/ig, '&amp;')
 			const href = /[ ='"`<>]/.test(url)
