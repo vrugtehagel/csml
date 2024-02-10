@@ -8,6 +8,7 @@ export default class CSML {
 	static #global
 	#location
 	#id
+	#cache = new Map
 
 	constructor(url){
 		if(!url && CSML.#global) errors.throw('illegal-constructor')
@@ -20,15 +21,23 @@ export default class CSML {
 
 	get args(){ return manager.get(this.#id, 'args') }
 
+	async #getModuleCode(url){
+		if(this.#cache.has(url.href))
+			return this.#cache.get(url.href)
+		const content = await Deno.readTextFile(url)
+		const tokens = Processor.process(content)
+		const code = Transpiler.transpile(tokens)
+		this.#cache.set(url.href, code)
+		return code
+	}
+
 	async import(csmlModule, args){
 		const url = this == CSML.#global
 			? toFileUrl(await Deno.realPath(csmlModule))
 			: new URL(csmlModule, this.#location)
+		const code = await this.#getModuleCode(url)
 		const id = manager.getNewId()
 		manager.register(id, {args})
-		const content = await Deno.readTextFile(url)
-		const tokens = Processor.process(content)
-		const code = Transpiler.transpile(tokens)
 		const tsURL = new URL(`${url}.${id}.ts`)
 		await Deno.writeTextFile(tsURL, code, {create: true})
 		const controller = new AbortController
